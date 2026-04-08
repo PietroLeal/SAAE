@@ -1,0 +1,44 @@
+<ion-content fullscreen class="login-bg">
+  <div class="layout">
+
+    <!-- LADO ESQUERDO -->
+    <div class="left">
+      <div class="home-wrapper">
+        <div class="logo-badge">
+          <ion-icon name="school-outline"></ion-icon>
+        </div>
+        
+        <h1>SAAE</h1>
+        <h2>Sistema de Agendamento de Ambientes Escolares</h2>
+
+        <p class="description">
+          Criado para transformar a gestão dos espaços do ISEPAM, o SAAE oferece uma maneira simples, 
+          rápida e organizada de reservar salas, laboratórios e ambientes de aprendizado. 
+          Chega de conflitos de horário, planilhas confusas ou ligações de última hora. 
+          Aqui, professores, coordenadores e equipe administrativa têm autonomia e transparência 
+          para planejar o melhor uso dos recursos da instituição.
+        </p>
+
+        <p class="mission">
+          <strong>Nosso compromisso é com a educação:</strong> facilitar o dia a dia de quem ensina e aprende, 
+          garantindo que cada espaço seja aproveitado com eficiência, justiça e simplicidade.
+        </p>
+
+        <ion-button expand="block" class="btn-login" (click)="goToLogin()">
+          Entrar
+          <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- LADO DIREITO -->
+    <div class="right">
+      <div class="overlay"></div>
+      <div class="quote">
+        <ion-icon name="chatbubble-outline"></ion-icon>
+        <p>"A tecnologia a serviço da educação: mais organização, menos burocracia."</p>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

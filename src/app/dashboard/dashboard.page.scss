@@ -1,0 +1,267 @@
+.welcome-section {
+  text-align: center;
+  margin: 2rem 0 1.5rem;
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+  }
+
+  p {
+    color: #666;
+    font-size: 1rem;
+  }
+}
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.ion-content {
+  --background: #f8f9ff;
+}
+
+.welcome-section {
+  margin: 1rem 1rem 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #dbe1f2;
+
+  .welcome-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--ion-color-primary);
+      margin: 0;
+    }
+
+    p {
+      color: #666;
+      font-size: 1rem;
+      margin: 0.3rem 0 0;
+    }
+  }
+
+  .welcome-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+
+    ion-button {
+      --padding-start: 0;
+      --padding-end: 0;
+      --icon-size: 24px;
+    }
+
+    ion-icon {
+      font-size: 1.6rem;
+      color: var(--ion-color-primary);
+    }
+  }
+}
+
+.dashboard-grid {
+  margin-bottom: 2rem;
+}
+
+.dashboard-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 82, 212, 0.1);
+  transition: transform 0.3s ease;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 82, 212, 0.15);
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    color: var(--ion-color-primary);
+    margin-bottom: 0.5rem;
+
+    &.danger {
+      color: var(--ion-color-danger);
+    }
+  }
+
+  ion-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  ion-card-content {
+    font-size: 0.9rem;
+    color: #666;
+  }
+}
+
+.recent-section {
+  margin-top: 1.5rem;
+
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+    margin-bottom: 1rem;
+  }
+
+  ion-item {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0.75rem;
+
+    ion-icon {
+      font-size: 1.2rem;
+    }
+
+    h3 {
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    ion-badge {
+      font-weight: 600;
+    }
+  }
+}
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+  }
+  
+  p {
+    margin-top: 1rem;
+    color: var(--ion-color-primary);
+  }
+}
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+  }
+  
+  p {
+    margin-top: 1rem;
+    color: var(--ion-color-primary);
+  }
+}
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+  }
+  
+  p {
+    margin-top: 1rem;
+    color: var(--ion-color-primary);
+  }
+}
+.welcome-section {
+  margin: 1rem 0 2rem;
+}
+
+.greeting-card {
+  background: linear-gradient(135deg, #0052d4, #4364f7);
+  border-radius: 24px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 82, 212, 0.2);
+
+  .greeting-icon {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-icon {
+      font-size: 2rem;
+      color: white;
+    }
+  }
+
+  .greeting-text {
+    flex: 1;
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem;
+      color: white;
+
+      .user-name {
+        font-weight: 700;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+      }
+    }
+
+    .user-role-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+
+    .date-info {
+      font-size: 0.85rem;
+      color: white;
+      margin: 0.25rem 0;
+      opacity: 0.9;
+    }
+
+    .daily-message {
+      font-size: 0.9rem;
+      color: white;
+      margin: 0.5rem 0 0;
+      font-style: italic;
+      font-weight: 500;
+      opacity: 0.95;
+    }
+  }
+} 

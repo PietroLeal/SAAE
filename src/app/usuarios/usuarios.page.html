@@ -1,0 +1,138 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <div class="header-actions">
+  <div class="header-title">
+    <h2>Gerenciar Usuários</h2>
+    <p class="subtitle">Visualize e edite os funcionários do sistema</p>
+  </div>
+  <div class="header-buttons">
+    <ion-button (click)="irParaCadastro()" class="btn-cadastrar">
+      <ion-icon name="person-add-outline" slot="start"></ion-icon>
+      Novo Funcionário
+    </ion-button>
+    <ion-button fill="clear" (click)="refresh()" class="refresh-btn">
+      <ion-icon name="refresh-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+  </div>
+</div>
+  <!-- Filtros -->
+  <div class="filtros-section">
+    <div class="filtros-grid">
+      <ion-item class="filtro-item">
+        <ion-label position="stacked">Buscar</ion-label>
+        <ion-input 
+          [(ngModel)]="buscaFiltro" 
+          (ionChange)="aplicarFiltros()" 
+          placeholder="Nome ou e-mail">
+          <ion-icon name="search-outline" slot="start"></ion-icon>
+        </ion-input>
+      </ion-item>
+      <ion-item class="filtro-item">
+        <ion-label position="stacked">Tipo</ion-label>
+        <ion-select [(ngModel)]="tipoFiltro" (ionChange)="aplicarFiltros()" placeholder="Todos">
+          <ion-select-option value="">Todos</ion-select-option>
+          <ion-select-option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+    <div class="filtros-actions">
+      <ion-button fill="clear" (click)="limparFiltros()">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Limpar Filtros
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Lista de Funcionários -->
+  <div *ngIf="!loading">
+    <div *ngIf="funcionariosFiltrados.length > 0" class="funcionarios-list">
+      <div *ngFor="let func of funcionariosFiltrados" class="funcionario-card">
+        <div class="funcionario-avatar">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+        <div class="funcionario-info">
+          <div class="funcionario-header">
+            <h3>{{ func.nome }}</h3>
+            <ion-badge [color]="getTipoColor(func.tipo)">{{ func.tipo }}</ion-badge>
+          </div>
+          <div class="funcionario-detalhes">
+            <div class="detalhe">
+              <ion-icon name="mail-outline"></ion-icon>
+              <span>{{ func.email }}</span>
+            </div>
+            <div class="detalhe">
+              <ion-icon name="call-outline"></ion-icon>
+              <span>{{ func.telefone || 'Não informado' }}</span>
+            </div>
+            <div class="detalhe">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>Cadastrado em {{ formatarData(func.createdAt) }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="action-buttons">
+          <ion-button 
+            class="btn-editar" 
+            fill="clear" 
+            (click)="abrirModal(func)">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button 
+            class="btn-excluir" 
+            fill="clear" 
+            (click)="confirmarExclusao(func)">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="funcionariosFiltrados.length === 0" class="empty-state">
+      <ion-icon name="people-outline"></ion-icon>
+      <h3>Nenhum funcionário encontrado</h3>
+      <p>Tente ajustar os filtros ou aguarde novos cadastros.</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando funcionários...</p>
+  </div>
+
+  <!-- Modal de edição -->
+  <div class="modal-overlay" *ngIf="modalOpen" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Editar Funcionário</h3>
+      
+      <ion-item>
+        <ion-label position="stacked">Nome</ion-label>
+        <ion-input [(ngModel)]="funcionarioAtual.nome" placeholder="Nome completo"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">E-mail</ion-label>
+        <ion-input [value]="funcionarioAtual.email" disabled></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Telefone</ion-label>
+        <ion-input [(ngModel)]="funcionarioAtual.telefone" placeholder="(99) 99999-9999"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Tipo</ion-label>
+        <ion-select [(ngModel)]="funcionarioAtual.tipo" placeholder="Selecione o tipo">
+          <ion-select-option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <div class="modal-buttons">
+        <ion-button fill="outline" (click)="fecharModal()">Cancelar</ion-button>
+        <ion-button (click)="salvarFuncionario()" [disabled]="!funcionarioAtual.nome">
+          Salvar
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

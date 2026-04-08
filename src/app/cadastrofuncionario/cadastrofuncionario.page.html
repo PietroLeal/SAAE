@@ -1,0 +1,118 @@
+<app-header></app-header>
+<ion-content fullscreen class="login-bg">
+  <div class="login-wrapper" [class.show]="!loading">
+    <h2>Cadastrar Funcionário</h2>
+    <p>Preencha os dados para criar uma conta</p>
+
+    <form novalidate [formGroup]="registerForm" (ngSubmit)="submitForm()">
+      <!-- Nome -->
+      <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input
+          type="text"
+          placeholder="Nome"
+          formControlName="name"
+          clearInput>
+        </ion-input>
+      </ion-item>
+      <ion-text color="danger" class="error-message" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+        <small>{{ getErrorMessage('name') }}</small>
+      </ion-text>
+
+      <!-- E-mail -->
+      <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        <ion-input
+          type="email"
+          placeholder="E-mail"
+          formControlName="email"
+          clearInput>
+        </ion-input>
+      </ion-item>
+      <ion-text color="danger" class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+        <small>{{ getErrorMessage('email') }}</small>
+      </ion-text>
+
+      <!-- Telefone -->
+      <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('telefone')?.invalid && registerForm.get('telefone')?.touched">
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        <ion-input
+          type="tel"
+          placeholder="Telefone"
+          formControlName="telefone"
+          clearInput>
+        </ion-input>
+      </ion-item>
+      <ion-text color="danger" class="error-message" *ngIf="registerForm.get('telefone')?.invalid && registerForm.get('telefone')?.touched">
+        <small>{{ getErrorMessage('telefone') }}</small>
+      </ion-text>
+
+      <!-- Tipo de Funcionário -->
+      <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('tipo')?.invalid && registerForm.get('tipo')?.touched">
+        <ion-icon name="briefcase-outline" slot="start"></ion-icon>
+        <ion-select
+          placeholder="Selecione o Tipo"
+          formControlName="tipo"
+          interface="alert"
+          okText="Selecionar"
+          cancelText="Cancelar">
+          <ion-select-option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-text color="danger" class="error-message" *ngIf="registerForm.get('tipo')?.invalid && registerForm.get('tipo')?.touched">
+        <small>{{ getErrorMessage('tipo') }}</small>
+      </ion-text>
+
+      <!-- Senha -->
+      <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Senha"
+          formControlName="password"
+          clearInput>
+        </ion-input>
+        <ion-icon
+          slot="end"
+          [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+          class="eye-icon"
+          (click)="togglePasswordVisibility()">
+        </ion-icon>
+      </ion-item>
+      <ion-text color="danger" class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+        <small>{{ getErrorMessage('password') }}</small>
+      </ion-text>
+
+      <!-- Confirmar Senha -->
+      <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+        <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
+        <ion-input
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Confirmar Senha"
+          formControlName="confirmPassword"
+          clearInput>
+        </ion-input>
+      </ion-item>
+      <ion-text color="danger" class="error-message" *ngIf="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched">
+        <small>As senhas não conferem</small>
+      </ion-text>
+
+      <!-- Botão Cadastrar -->
+      <ion-button
+        type="submit"
+        expand="block"
+        class="btn-login"
+        [disabled]="loading">
+        <ng-container *ngIf="!loading; else carregando">
+          <span class="btn-text">
+            Cadastrar
+            <ion-icon name="person-add-outline"></ion-icon>
+          </span>
+        </ng-container>
+        <ng-template #carregando>
+          <ion-spinner name="crescent"></ion-spinner>
+        </ng-template>
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

@@ -1,0 +1,84 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando...</p>
+  </div>
+
+  <div *ngIf="!loading" class="perfil-container">
+    <!-- Avatar -->
+    <div class="avatar-container">
+      <div class="avatar">
+        <ion-icon name="person-outline"></ion-icon>
+      </div>
+    </div>
+
+    <!-- Formulário -->
+    <ion-list>
+      <!-- Nome -->
+      <ion-item>
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-label position="stacked">Nome</ion-label>
+        <ion-input 
+          [(ngModel)]="usuario.nome" 
+          [disabled]="!editando"
+          placeholder="Seu nome completo">
+        </ion-input>
+      </ion-item>
+
+      <!-- E-mail (não editável) -->
+      <ion-item>
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        <ion-label position="stacked">E-mail</ion-label>
+        <ion-input 
+          [value]="usuario.email" 
+          disabled
+          placeholder="Seu e-mail">
+        </ion-input>
+      </ion-item>
+
+      <!-- Telefone -->
+      <ion-item>
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        <ion-label position="stacked">Telefone</ion-label>
+        <ion-input 
+          [(ngModel)]="usuario.telefone" 
+          [disabled]="!editando"
+          type="tel"
+          placeholder="(99) 99999-9999">
+        </ion-input>
+      </ion-item>
+
+      <!-- Tipo (não editável) -->
+      <ion-item>
+        <ion-icon name="briefcase-outline" slot="start"></ion-icon>
+        <ion-label position="stacked">Cargo</ion-label>
+        <ion-input 
+          [value]="usuario.tipo" 
+          disabled
+          placeholder="Seu cargo">
+        </ion-input>
+      </ion-item>
+
+      <!-- Data de criação -->
+      <ion-item *ngIf="usuario.criadoEm">
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        <ion-label position="stacked">Cadastrado em</ion-label>
+        <ion-input [value]="usuario.criadoEm" disabled></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <!-- Botões de ação -->
+    <div class="action-buttons" *ngIf="editando">
+      <ion-button expand="block" color="success" (click)="salvarPerfil()" [disabled]="salvando">
+        <ion-icon name="save-outline" slot="start"></ion-icon>
+        {{ salvando ? 'Salvando...' : 'Salvar alterações' }}
+      </ion-button>
+      <ion-button expand="block" color="medium" fill="outline" (click)="cancelarEdicao()">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Cancelar
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,156 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding" color="light">
+  <!-- Tela de loading -->
+  <div *ngIf="!dadosCarregados" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando...</p>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div *ngIf="dadosCarregados">
+    <div class="welcome-section">
+      <div class="greeting-card">
+        <div class="greeting-icon">
+          <ion-icon [name]="getIconeSaudacao()"></ion-icon>
+        </div>
+        <div class="greeting-text">
+          <h1>{{ getSaudacao() }}, <span class="user-name">{{ userName || 'Usuário' }}</span>!</h1>
+          <p class="user-role-badge">{{ userRole || 'Colaborador' }}</p>
+          <p class="date-info">{{ getDataFormatada() }}</p>
+          <p class="daily-message">{{ mensagemDoDia }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reservas recentes -->
+    <ion-card *ngFor="let reserva of recentBookings; let i = index" class="recent-booking-card ion-margin-bottom">
+      <ion-card-header>
+        <ion-card-title>Reserva: {{ reserva.salaNome }}</ion-card-title>
+        <ion-card-subtitle>{{ formatarData(reserva.data) }} | {{ getHorarioLabel(reserva.horario) }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Sala: {{ reserva.salaNome }} <br>
+        Status: <ion-badge [color]="reserva.status === 'confirmada' ? 'success' : reserva.status === 'cancelada' ? 'danger' : 'warning'">
+          {{ reserva.status === 'confirmada' ? 'Confirmada' : reserva.status === 'cancelada' ? 'Cancelada' : 'Pendente' }}
+        </ion-badge>
+      </ion-card-content>
+      <ion-card-content *ngIf="reserva.status !== 'cancelada'">
+        <ion-button color="danger" fill="clear" (click)="removerReserva(i)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- TODOS OS CARDS EM UM ÚNICO GRID -->
+    <ion-grid>
+      <ion-row>
+        <!-- Cards Básicos (todos os usuários) -->
+        <ion-col size="6">
+          <ion-card class="dashboard-card" (click)="openScheduling()">
+            <ion-icon name="calendar-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Agendar Sala</ion-card-title>
+            <ion-card-content>Reservar ambiente</ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card class="dashboard-card" (click)="cancelBooking()">
+            <ion-icon name="close-circle-outline" class="card-icon danger"></ion-icon>
+            <ion-card-title>Cancelar</ion-card-title>
+            <ion-card-content>Cancelar agendamento</ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Consulta Geral -->
+        <ion-col size="6" *ngIf="permissoes?.verRelatorios">
+          <ion-card class="dashboard-card" (click)="openConsultaGeral()">
+            <ion-icon name="search-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Consulta Geral</ion-card-title>
+            <ion-card-content>Ver todas as reservas</ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Relatórios -->
+        <ion-col size="6" *ngIf="permissoes?.verRelatorios">
+          <ion-card class="dashboard-card" (click)="viewReports()">
+            <ion-icon name="bar-chart-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Relatórios</ion-card-title>
+            <ion-card-content>Visualizar estatísticas</ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Gerenciar Salas -->
+        <ion-col size="6" *ngIf="permissoes?.gerenciarSalas">
+          <ion-card class="dashboard-card" (click)="openGerenciarSalas()">
+            <ion-icon name="build-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Gerenciar Salas</ion-card-title>
+            <ion-card-content>Tipos e capacidades</ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Gerenciar Disponibilidade -->
+        <ion-col size="6" *ngIf="permissoes?.gerenciarDisponibilidade">
+          <ion-card class="dashboard-card" (click)="openGerenciarDisponibilidade()">
+            <ion-icon name="calendar-clear-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Gerenciar Disponibilidade</ion-card-title>
+            <ion-card-content>Cadastrar e alterar horários</ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Usuários -->
+        <ion-col size="6" *ngIf="permissoes?.verUsuarios">
+          <ion-card class="dashboard-card" (click)="manageUsers()">
+            <ion-icon name="people-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Usuários</ion-card-title>
+            <ion-card-content>Gerenciar acesso</ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Gestão de Professores (mesmo que Usuários) -->
+        <ion-col size="6" *ngIf="permissoes?.gerenciarUsuarios">
+          <ion-card class="dashboard-card" (click)="openGestaoProfessores()">
+            <ion-icon name="people-circle-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Gestão de Professores</ion-card-title>
+            <ion-card-content>Visualização e busca</ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Visualização Detalhada -->
+        <ion-col size="6" *ngIf="permissoes?.verRelatorios">
+          <ion-card class="dashboard-card" (click)="openDetalhesAgendamentos()">
+            <ion-icon name="document-text-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Visualização Detalhada</ion-card-title>
+            <ion-card-content>Solicitante, sala, data e horário</ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Ver Logs -->
+        <ion-col size="6" *ngIf="permissoes?.verLogs">
+          <ion-card class="dashboard-card" (click)="viewLogs()">
+            <ion-icon name="folder-open-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Ver Logs</ion-card-title>
+            <ion-card-content>Ações do sistema</ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Recursos -->
+        <ion-col size="6" *ngIf="permissoes?.gerenciarRecursos">
+          <ion-card class="dashboard-card" (click)="openRecursos()">
+            <ion-icon name="cube-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Recursos</ion-card-title>
+            <ion-card-content>Gerenciar recursos da escola</ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Perfis -->
+        <ion-col size="6" *ngIf="permissoes?.gerenciarPerfis">
+          <ion-card class="dashboard-card" (click)="openPerfis()">
+            <ion-icon name="people-circle-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Perfis</ion-card-title>
+            <ion-card-content>Criar e gerenciar perfis</ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

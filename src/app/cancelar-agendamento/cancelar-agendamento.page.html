@@ -1,0 +1,59 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <div class="header-actions">
+    <h2>Meus Agendamentos</h2>
+    <p class="subtitle">Gerencie suas reservas de salas</p>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando seus agendamentos...</p>
+  </div>
+
+  <!-- Lista de Reservas -->
+  <div *ngIf="!loading">
+    <div *ngIf="reservas.length > 0" class="reservas-list">
+      <div *ngFor="let reserva of reservas" class="reserva-card">
+        <div class="reserva-info">
+          <div class="reserva-sala">
+            <ion-icon name="business-outline"></ion-icon>
+            <h3>{{ reserva.salaNome }}</h3>
+          </div>
+          <div class="reserva-detalhes">
+            <div class="detalhe">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>{{ formatarData(reserva.data) }}</span>
+            </div>
+            <div class="detalhe">
+              <ion-icon name="time-outline"></ion-icon>
+              <span>{{ getHorarioLabel(reserva.horario) }}</span>
+            </div>
+            <div class="detalhe" *ngIf="reserva.motivo">
+              <ion-icon name="document-text-outline"></ion-icon>
+              <span>{{ reserva.motivo }}</span>
+            </div>
+          </div>
+        </div>
+        <ion-button 
+          class="btn-cancelar" 
+          fill="clear" 
+          (click)="confirmarCancelamento(reserva)"
+          [disabled]="cancelando">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <div *ngIf="reservas.length === 0" class="empty-state">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <h3>Nenhum agendamento encontrado</h3>
+      <p>Você ainda não fez nenhuma reserva de sala.</p>
+      <ion-button (click)="irParaAgendamento()" class="btn-agendar">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Fazer Agendamento
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

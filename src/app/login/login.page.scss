@@ -1,0 +1,125 @@
+.login-bg {
+  --background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc);
+}
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+}
+
+.login-wrapper {
+  background: #fff;
+  width: 100%;
+  max-width: 400px;
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  text-align: center;
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h2 {
+  font-weight: 700;
+  font-size: 2rem;
+  color: #0052d4;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  margin-bottom: 2rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.input-item {
+  margin-bottom: 1.5rem;
+  --background: #eef3ff;
+  --border-radius: 50px !important;
+  --inner-padding-end: 0px;
+  --padding-start: 0px;
+  --padding-end: 0px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+  --min-height: 56px;
+  border-radius: 50px !important;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  ion-icon:first-child {
+    font-size: 1.6rem;
+    color: #0052d4;
+    background-color: #d0e2ff;
+    border-radius: 50%;
+    padding: 0.4rem;
+    margin-left: 0.75rem;
+    margin-right: 0.5rem;
+  }
+
+  ion-input {
+    --padding-start: 0px;
+    --padding-end: 16px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+    height: 100%;
+  }
+}
+
+.btn-login {
+  --background: #0052d4;
+  --background-activated: #003a9f;
+  --background-focused: #003a9f;
+  --box-shadow: 0 5px 15px rgba(0, 82, 212, 0.5);
+  --border-radius: 50px !important;
+  border-radius: 50px !important;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #fff !important;
+  height: 50px;
+  margin-top: 1rem;
+
+  .btn-text {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  ion-spinner {
+    --color: #fff;
+  }
+}
+
+.forgot-password-link {
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.forgot-btn {
+  --color: #0052d4;
+  --color-activated: #003a9f;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.eye-icon {
+  font-size: 1.3rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0.3rem;
+  margin-right: 0.75rem;
+}

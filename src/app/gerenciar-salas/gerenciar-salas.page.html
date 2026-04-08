@@ -1,0 +1,111 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <div class="header-actions">
+    <h2>Gerenciar Salas</h2>
+    <ion-button (click)="abrirModal()">
+      <ion-icon name="add-outline" slot="start"></ion-icon>
+      Nova Sala
+    </ion-button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando salas...</p>
+  </div>
+
+  <!-- Lista de salas -->
+  <ion-list *ngIf="!loading">
+    <ion-item *ngFor="let sala of salas" class="sala-item" button>
+      <ion-icon [name]="getIconePorTipo(sala.tipoAmbiente)" slot="start" class="sala-icon"></ion-icon>
+      <ion-label>
+        <h2>{{ sala.nome }}</h2>
+        <p>Capacidade: {{ sala.capacidade }} pessoas</p>
+        <p *ngIf="sala.recursos?.length">Recursos: {{ sala.recursos.join(', ') }}</p>
+        <p *ngIf="sala.descricao">{{ sala.descricao }}</p>
+        <ion-badge [color]="sala.ativa ? 'success' : 'danger'">
+          {{ sala.ativa ? 'Ativa' : 'Inativa' }}
+        </ion-badge>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="abrirModal(sala); $event.stopPropagation()" color="primary">
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-button>
+        <ion-button (click)="confirmarExclusao(sala); $event.stopPropagation()" color="danger">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+
+    <ion-item *ngIf="salas.length === 0">
+      <ion-label class="ion-text-center">
+        <p>Nenhuma sala cadastrada. Clique em "Nova Sala" para começar.</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Modal de edição/criação -->
+  <div class="modal-overlay" *ngIf="modalOpen" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>{{ editando ? 'Editar Sala' : 'Nova Sala' }}</h3>
+      
+      <ion-item>
+        <ion-label position="stacked">Nome da Sala *</ion-label>
+        <ion-input [(ngModel)]="salaAtual.nome" placeholder="Ex: Auditório Principal"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Tipo de Ambiente *</ion-label>
+        <ion-select [(ngModel)]="salaAtual.tipoAmbiente" placeholder="Selecione o tipo" interface="popover">
+          <ion-select-option *ngFor="let tipo of tiposAmbiente" [value]="tipo.valor">
+            <ion-icon [name]="tipo.icone" slot="start"></ion-icon>
+            {{ tipo.nome }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Capacidade</ion-label>
+        <ion-input type="number" [(ngModel)]="salaAtual.capacidade" placeholder="Número de pessoas"></ion-input>
+      </ion-item>
+
+<ion-item>
+  <ion-label position="stacked">Recursos</ion-label>
+  <div class="recursos-input">
+    <ion-select 
+      [(ngModel)]="recursoSelecionado" 
+      placeholder="Selecione um recurso"
+      (ionChange)="adicionarRecurso()">
+      <ion-select-option *ngFor="let rec of recursosDisponiveis" [value]="rec.id">
+        {{ rec.nome }}
+      </ion-select-option>
+    </ion-select>
+  </div>
+  <div class="recursos-list" *ngIf="salaAtual.recursos?.length">
+    <ion-chip *ngFor="let recId of salaAtual.recursos" (click)="removerRecurso(recId)">
+      {{ getRecursoNome(recId) }}
+      <ion-icon name="close-circle-outline"></ion-icon>
+    </ion-chip>
+  </div>
+</ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Descrição</ion-label>
+        <ion-textarea [(ngModel)]="salaAtual.descricao" rows="2" placeholder="Observações sobre a sala"></ion-textarea>
+      </ion-item>
+
+      <ion-item *ngIf="editando">
+        <ion-label>Ativa</ion-label>
+        <ion-toggle [(ngModel)]="salaAtual.ativa"></ion-toggle>
+      </ion-item>
+
+      <div class="modal-buttons">
+        <ion-button fill="outline" (click)="fecharModal()">Cancelar</ion-button>
+        <ion-button (click)="salvarSala()" [disabled]="!salaAtual.nome || !salaAtual.tipoAmbiente">
+          {{ editando ? 'Salvar' : 'Criar' }}
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

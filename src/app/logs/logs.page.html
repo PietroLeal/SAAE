@@ -1,0 +1,85 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <div class="header-actions">
+    <h2>Logs do Sistema</h2>
+    <p class="subtitle">Histórico de ações realizadas no sistema</p>
+    <ion-button fill="clear" (click)="refresh()" class="refresh-btn">
+      <ion-icon name="refresh-outline" slot="start"></ion-icon>
+      Atualizar
+    </ion-button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros-section">
+    <div class="filtros-grid">
+      <ion-item class="filtro-item">
+        <ion-label position="stacked">Ação</ion-label>
+        <ion-select [(ngModel)]="acaoFiltro" (ionChange)="aplicarFiltros()">
+          <ion-select-option *ngFor="let acao of acoes" [value]="acao.valor">
+            {{ acao.nome }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item class="filtro-item">
+        <ion-label position="stacked">Data Início</ion-label>
+        <ion-input type="date" [(ngModel)]="dataInicio" (ionChange)="aplicarFiltros()"></ion-input>
+      </ion-item>
+      <ion-item class="filtro-item">
+        <ion-label position="stacked">Data Fim</ion-label>
+        <ion-input type="date" [(ngModel)]="dataFim" (ionChange)="aplicarFiltros()"></ion-input>
+      </ion-item>
+      <ion-item class="filtro-item" *ngIf="userTipo === 'Diretor' || userTipo === 'Chefe de TI'">
+        <ion-label position="stacked">Usuário</ion-label>
+        <ion-select [(ngModel)]="usuarioFiltro" (ionChange)="aplicarFiltros()" placeholder="Todos">
+          <ion-select-option value="">Todos</ion-select-option>
+          <ion-select-option *ngFor="let usuario of usuarios" [value]="usuario">{{ usuario }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+    <div class="filtros-actions">
+      <ion-button fill="clear" (click)="limparFiltros()">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Limpar Filtros
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Lista de Logs -->
+  <div *ngIf="!loading">
+    <div *ngIf="logsFiltrados.length > 0" class="logs-list">
+      <div *ngFor="let log of logsFiltrados" class="log-card">
+        <div class="log-icon" [style.backgroundColor]="getAcaoColor(log.acao) === 'success' ? '#28a745' : getAcaoColor(log.acao) === 'danger' ? '#dc3545' : getAcaoColor(log.acao) === 'warning' ? '#ffc107' : '#0052d4'">
+          <ion-icon [name]="getAcaoIcon(log.acao)"></ion-icon>
+        </div>
+        <div class="log-content">
+          <div class="log-header">
+            <span class="log-acao" [class]="'status-' + getAcaoColor(log.acao)">
+              {{ getAcaoLabel(log.acao) }}
+            </span>
+            <span class="log-data">{{ formatarData(log.data) }}</span>
+          </div>
+          <div class="log-usuario">
+            <ion-icon name="person-outline"></ion-icon>
+            {{ log.usuarioNome }} ({{ log.usuarioTipo }})
+          </div>
+          <div class="log-detalhes" *ngIf="log.detalhes">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <pre>{{ log.detalhes | json }}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="logsFiltrados.length === 0" class="empty-state">
+      <ion-icon name="list-outline"></ion-icon>
+      <h3>Nenhum log encontrado</h3>
+      <p>Tente ajustar os filtros ou aguarde novas ações.</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando logs...</p>
+  </div>
+</ion-content>

@@ -1,0 +1,60 @@
+<ion-content class="login-bg">
+  <div class="login-container">
+    <div class="login-wrapper" [class.show]="!loading">
+      <div class="brand-section">
+        <div class="brand-icon">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </div>
+        <h2>Sistema de Gestão Escolar</h2>
+        <p>Organize salas, agendamentos e recursos em um só lugar</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <ion-item lines="none" class="input-item">
+          <ion-icon name="mail-outline" slot="start"></ion-icon>
+          <ion-input
+            type="email"
+            placeholder="E-mail"
+            formControlName="email"
+            clearInput>
+          </ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="input-item">
+          <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+          <ion-input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Senha"
+            formControlName="password"
+            clearInput>
+          </ion-input>
+          <ion-icon
+            slot="end"
+            [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+            class="eye-icon"
+            (click)="togglePasswordVisibility()">
+          </ion-icon>
+        </ion-item>
+
+        <div class="forgot-password-link">
+          <ion-button fill="clear" (click)="goToForgotPassword()" class="forgot-btn">
+            Esqueci minha senha?
+          </ion-button>
+        </div>
+
+        <ion-button
+          type="submit"
+          expand="block"
+          class="btn-login"
+          [disabled]="loading">
+          <ng-container *ngIf="!loading; else carregando">
+            <span class="btn-text">Entrar</span>
+          </ng-container>
+          <ng-template #carregando>
+            <ion-spinner name="crescent"></ion-spinner>
+          </ng-template>
+        </ion-button>
+      </form>
+    </div>
+  </div>
+</ion-content>

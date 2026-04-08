@@ -1,0 +1,277 @@
+.header-actions {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-title {
+  flex: 1;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.refresh-btn {
+  --color: var(--ion-color-primary);
+  margin: 0;
+  height: 40px;
+  width: 40px;
+}
+
+.filtros-section {
+  background: white;
+  border-radius: 20px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filtros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filtro-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  
+  ion-label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+  }
+  
+  ion-input, ion-select {
+    --background: #f5f5f5;
+    --border-radius: 12px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    margin-top: 8px;
+    background: #f5f5f5;
+    border-radius: 12px;
+  }
+}
+
+.filtros-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.reservas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reserva-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .reserva-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+
+    .reserva-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      ion-icon {
+        font-size: 1.2rem;
+        color: var(--ion-color-primary);
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+      }
+    }
+  }
+
+  .reserva-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #666;
+
+      ion-icon {
+        font-size: 0.9rem;
+        color: #999;
+      }
+    }
+  }
+
+  .reserva-footer {
+    text-align: right;
+    
+    ion-button {
+      --color: var(--ion-color-primary);
+      --padding-start: 8px;
+      --padding-end: 8px;
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+
+  ion-icon {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  p {
+    margin: 0;
+    color: #999;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+
+    h3 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--ion-color-primary);
+    }
+
+    ion-button {
+      --padding-start: 0;
+      --padding-end: 0;
+      margin: 0;
+      height: 32px;
+      width: 32px;
+    }
+  }
+}
+
+.detalhes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detalhe-item {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+
+  ion-icon {
+    font-size: 1.3rem;
+    color: var(--ion-color-primary);
+    margin-top: 2px;
+  }
+
+  div {
+    flex: 1;
+
+    strong {
+      display: block;
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      margin: 0 0 0.25rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #333;
+    }
+
+    small {
+      display: block;
+      font-size: 0.7rem;
+      color: #999;
+    }
+  }
+}
+
+ion-content {
+  --background: #f5f5f5;
+  background: #f5f5f5;
+}

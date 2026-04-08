@@ -1,0 +1,111 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <div class="header-actions">
+    <div class="header-title">
+      <h2>Gerenciar Recursos</h2>
+      <p class="subtitle">Cadastre equipamentos e materiais disponíveis</p>
+    </div>
+    <div class="header-buttons">
+      <ion-button (click)="abrirModal()" class="btn-adicionar">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Novo Recurso
+      </ion-button>
+      <ion-button fill="clear" (click)="refresh()" class="refresh-btn">
+        <ion-icon name="refresh-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros-section">
+    <div class="filtros-grid">
+      <ion-item class="filtro-item">
+        <ion-label position="stacked">Buscar</ion-label>
+        <ion-input 
+          [(ngModel)]="buscaFiltro" 
+          (ionChange)="aplicarFiltros()" 
+          placeholder="Nome ou descrição">
+          <ion-icon name="search-outline" slot="start"></ion-icon>
+        </ion-input>
+      </ion-item>
+    </div>
+    <div class="filtros-actions">
+      <ion-button fill="clear" (click)="limparFiltros()">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Limpar Filtros
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Lista de Recursos -->
+  <div *ngIf="!loading">
+    <div *ngIf="recursosFiltrados.length > 0" class="recursos-list">
+      <div *ngFor="let recurso of recursosFiltrados" class="recurso-card">
+        <div class="recurso-icone">
+          <ion-icon name="cube-outline"></ion-icon>
+        </div>
+        <div class="recurso-info">
+          <div class="recurso-header">
+            <h3>{{ recurso.nome }}</h3>
+          </div>
+          <div class="recurso-detalhes" *ngIf="recurso.descricao">
+            <div class="detalhe">
+              <ion-icon name="document-text-outline"></ion-icon>
+              <span>{{ recurso.descricao }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="action-buttons">
+          <ion-button 
+            class="btn-editar" 
+            fill="clear" 
+            (click)="abrirModal(recurso)">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button 
+            class="btn-excluir" 
+            fill="clear" 
+            (click)="confirmarExclusao(recurso)">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="recursosFiltrados.length === 0" class="empty-state">
+      <ion-icon name="cube-outline"></ion-icon>
+      <h3>Nenhum recurso encontrado</h3>
+      <p>Clique em "Novo Recurso" para começar a cadastrar.</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando recursos...</p>
+  </div>
+
+  <!-- Modal de edição/criação -->
+  <div class="modal-overlay" *ngIf="modalOpen" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>{{ editando ? 'Editar Recurso' : 'Novo Recurso' }}</h3>
+      
+      <ion-item>
+        <ion-label position="stacked">Nome *</ion-label>
+        <ion-input [(ngModel)]="recursoAtual.nome" placeholder="Ex: Projetor Multimídia"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Descrição</ion-label>
+        <ion-textarea [(ngModel)]="recursoAtual.descricao" rows="2" placeholder="Observações sobre o recurso"></ion-textarea>
+      </ion-item>
+
+      <div class="modal-buttons">
+        <ion-button fill="outline" (click)="fecharModal()">Cancelar</ion-button>
+        <ion-button (click)="salvarRecurso()" [disabled]="!recursoAtual.nome">
+          {{ editando ? 'Salvar' : 'Criar' }}
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

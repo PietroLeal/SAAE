@@ -1,0 +1,142 @@
+.header-actions {
+  margin-bottom: 1.5rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+  }
+
+  .subtitle {
+    margin: 0.5rem 0 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.reservas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reserva-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.reserva-info {
+  flex: 1;
+}
+
+.reserva-sala {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  ion-icon {
+    font-size: 1.2rem;
+    color: var(--ion-color-primary);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.reserva-detalhes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 28px;
+}
+
+.detalhe {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #666;
+
+  ion-icon {
+    font-size: 0.9rem;
+    color: #999;
+  }
+
+  span {
+    font-size: 0.8rem;
+  }
+}
+
+.btn-cancelar {
+  --color: #ff4444;
+  --color-hover: #ff6666;
+  margin: 0;
+  height: 40px;
+  width: 40px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+
+  ion-icon {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  p {
+    margin-bottom: 1.5rem;
+    color: #999;
+  }
+}
+
+.btn-agendar {
+  --background: #0052d4;
+  --border-radius: 50px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+}
+
+ion-content {
+  --background: #f5f5f5;
+  background: #f5f5f5;
+}

@@ -1,0 +1,64 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <div class="header-actions">
+    <div class="header-title">
+      <h2>Perfis e Permissões</h2>
+      <p class="subtitle">Gerencie o que cada tipo de usuário pode fazer</p>
+    </div>
+    <ion-button fill="clear" (click)="carregarPermissoes()" class="refresh-btn">
+      <ion-icon name="refresh-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+  </div>
+
+  <div *ngIf="!loading" class="perfis-container">
+    <div *ngFor="let perfil of permissoesPorPerfil" class="perfil-card">
+      <div class="perfil-header">
+        <div class="perfil-title">
+          <ion-icon name="people-outline"></ion-icon>
+          <h3>{{ perfil.perfil }}</h3>
+        </div>
+        <ion-button 
+          *ngIf="!editando || perfilEditando !== perfil.perfil"
+          fill="clear" 
+          (click)="entrarModoEdicao(perfil.perfil, perfil.permissoes)">
+          <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+      
+      <div class="permissao-grid">
+        <div *ngFor="let permissao of permissoesDisponiveis" class="permissao-item">
+          <div class="permissao-info">
+            <span class="permissao-nome">{{ permissao.nome }}</span>
+            <span class="permissao-descricao">{{ permissao.descricao }}</span>
+          </div>
+          <div class="permissao-toggle">
+            <ion-toggle 
+              *ngIf="!(editando && perfilEditando === perfil.perfil)"
+              [ngModel]="perfil.permissoes[permissao.chave]"
+              disabled="true">
+            </ion-toggle>
+            <ion-toggle 
+              *ngIf="editando && perfilEditando === perfil.perfil"
+              [(ngModel)]="permissoesEditando[permissao.chave]">
+            </ion-toggle>
+          </div>
+        </div>
+      </div>
+      
+      <div class="perfil-footer" *ngIf="editando && perfilEditando === perfil.perfil">
+        <ion-button fill="outline" (click)="cancelarEdicao()">
+          Cancelar
+        </ion-button>
+        <ion-button (click)="salvarPermissoes()">
+          Salvar Alterações
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando permissões...</p>
+  </div>
+</ion-content>

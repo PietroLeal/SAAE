@@ -1,0 +1,139 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <div class="header-actions">
+    <h2>Gerenciar Disponibilidade</h2>
+  </div>
+
+  <!-- Seleção de Sala -->
+  <ion-item class="sala-selector">
+    <ion-label position="stacked">Selecione a Sala</ion-label>
+    <ion-select [(ngModel)]="salaSelecionada" (ionChange)="onSalaSelecionada()" placeholder="Escolha uma sala">
+      <ion-select-option *ngFor="let sala of salas" [value]="sala.id">
+        <ion-icon name="business-outline" slot="start"></ion-icon>
+        {{ sala.nome }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando...</p>
+  </div>
+
+  <!-- Lista de Disponibilidades -->
+  <div *ngIf="!loading && salaSelecionada">
+    <div class="header-disponibilidade">
+      <h3>Horários Disponíveis</h3>
+      <div class="button-group">
+        <ion-button (click)="abrirModal()" size="small">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Adicionar Dia
+        </ion-button>
+        <ion-button (click)="abrirModalParaTodosDias()" size="small" color="secondary">
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          Definir para Todos os Dias
+        </ion-button>
+      </div>
+    </div>
+
+    <ion-list *ngIf="disponibilidades.length > 0">
+      <ion-item *ngFor="let disp of disponibilidades" class="disponibilidade-item">
+        <ion-icon name="time-outline" slot="start" class="time-icon"></ion-icon>
+        <ion-label>
+          <h3>{{ disp.diaNome }}</h3>
+          <p>Horários: {{ getHorariosTexto(disp.horarios) }}</p>
+          <ion-badge [color]="disp.ativo ? 'success' : 'danger'">
+            {{ disp.ativo ? 'Ativo' : 'Inativo' }}
+          </ion-badge>
+        </ion-label>
+        <ion-buttons slot="end">
+          <ion-button (click)="abrirModal(disp)" color="primary">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+          <ion-button (click)="confirmarExclusao(disp)" color="danger">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+
+    <ion-item *ngIf="disponibilidades.length === 0" class="empty-state">
+      <ion-label class="ion-text-center">
+        <p>Nenhum horário cadastrado para esta sala.</p>
+        <p>Clique em "Adicionar Dia" para começar ou "Definir para Todos os Dias".</p>
+      </ion-label>
+    </ion-item>
+  </div>
+
+  <div *ngIf="!loading && !salaSelecionada" class="empty-state">
+    <ion-icon name="business-outline"></ion-icon>
+    <p>Selecione uma sala para gerenciar os horários de disponibilidade.</p>
+  </div>
+
+  <!-- Modal de edição/criação -->
+  <div class="modal-overlay" *ngIf="modalOpen" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>
+        <ng-container *ngIf="modoConfiguracao === 'todos'">
+          Configurar para Todos os Dias (Segunda a Sexta)
+        </ng-container>
+        <ng-container *ngIf="modoConfiguracao === 'unico' && editando">
+          Editar Horários - {{ disponibilidadeAtual.diaNome }}
+        </ng-container>
+        <ng-container *ngIf="modoConfiguracao === 'unico' && !editando">
+          Adicionar Horários
+        </ng-container>
+      </h3>
+      
+      <ion-item *ngIf="modoConfiguracao === 'unico' && !editando">
+        <ion-label position="stacked">Dia da Semana</ion-label>
+        <ion-select [(ngModel)]="disponibilidadeAtual.diaSemana" placeholder="Selecione o dia">
+          <ion-select-option *ngFor="let dia of diasSemana" [value]="dia.valor">
+            {{ dia.nome }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Sala: {{ disponibilidadeAtual.nomeSala }}</ion-label>
+      </ion-item>
+
+      <div class="horarios-section">
+        <div class="horarios-header">
+          <ion-label>Selecione os Horários Disponíveis</ion-label>
+          <div class="horarios-actions">
+            <ion-button fill="clear" size="small" (click)="selecionarTodosHorarios()">
+              Selecionar Todos
+            </ion-button>
+            <ion-button fill="clear" size="small" (click)="limparTodosHorarios()">
+              Limpar
+            </ion-button>
+          </div>
+        </div>
+        
+        <div class="horarios-grid">
+          <ion-chip 
+            *ngFor="let horario of horarios" 
+            [class.selected]="disponibilidadeAtual.horarios.includes(horario.numero)"
+            (click)="toggleHorario(horario.numero)">
+            {{ horario.label }}
+          </ion-chip>
+        </div>
+      </div>
+
+      <ion-item *ngIf="editando">
+        <ion-label>Ativo</ion-label>
+        <ion-toggle [(ngModel)]="disponibilidadeAtual.ativo"></ion-toggle>
+      </ion-item>
+
+      <div class="modal-buttons">
+        <ion-button fill="outline" (click)="fecharModal()">Cancelar</ion-button>
+        <ion-button (click)="salvarDisponibilidade()" [disabled]="disponibilidadeAtual.horarios.length === 0">
+          {{ editando ? 'Salvar' : (modoConfiguracao === 'todos' ? 'Configurar' : 'Adicionar') }}
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

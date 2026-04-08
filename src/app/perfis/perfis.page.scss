@@ -1,0 +1,151 @@
+.header-actions {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-title {
+  flex: 1;
+}
+
+.refresh-btn {
+  --color: var(--ion-color-primary);
+  margin: 0;
+  height: 40px;
+  width: 40px;
+}
+
+.perfis-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+// Adicione ao final do arquivo
+
+.forgot-password-link {
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.forgot-btn {
+  --color: #0052d4;
+  --color-activated: #003a9f;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.perfil-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.perfil-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #0052d4, #4364f7);
+  color: white;
+
+  .perfil-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    ion-icon {
+      font-size: 1.3rem;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+  }
+
+  ion-button {
+    --color: white;
+    --background: rgba(255, 255, 255, 0.2);
+    --border-radius: 50%;
+    margin: 0;
+    height: 32px;
+    width: 32px;
+  }
+}
+
+.permissao-grid {
+  padding: 0.5rem 1.5rem;
+}
+
+.permissao-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.permissao-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .permissao-nome {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .permissao-descricao {
+    font-size: 0.7rem;
+    color: #999;
+  }
+}
+
+.permissao-toggle {
+  margin-left: 1rem;
+}
+
+.perfil-footer {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  border-top: 1px solid #f0f0f0;
+
+  ion-button {
+    --border-radius: 50px;
+    height: 40px;
+    font-weight: 600;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+
+  ion-spinner {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+ion-content {
+  --background: #f5f5f5;
+  background: #f5f5f5;
+}

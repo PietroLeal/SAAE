@@ -1,0 +1,23 @@
+<ion-content class="menu-content">
+  <div class="user-info">
+    <div class="avatar">
+      <ion-icon name="person-outline"></ion-icon>
+    </div>
+    <div class="user-details">
+      <h3>{{ userName }}</h3>
+      <p>{{ userRole }}</p>
+    </div>
+  </div>
+
+  <div class="menu-items">
+    <ion-item class="menu-item" (click)="verPerfil()" button detail="false">
+      <ion-icon name="person-outline" slot="start"></ion-icon>
+      <ion-label>Ver Perfil</ion-label>
+    </ion-item>
+
+    <ion-item class="menu-item logout-item" (click)="logout()" button detail="false">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      <ion-label>Sair</ion-label>
+    </ion-item>
+  </div>
+</ion-content>

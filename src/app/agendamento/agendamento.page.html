@@ -1,0 +1,90 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <div class="header-actions">
+    <h2>Agendar Sala</h2>
+    <p class="subtitle">Preencha os dados para reservar um ambiente</p>
+  </div>
+
+  <div class="form-card">
+    <!-- Seleção de Sala -->
+    <div class="campo">
+      <div class="campo-label">
+        <ion-icon name="business-outline"></ion-icon>
+        <span>Sala</span>
+      </div>
+      <ion-select [(ngModel)]="salaSelecionada" (ionChange)="onSalaSelecionada()" placeholder="Selecione uma sala" class="campo-select">
+        <ion-select-option *ngFor="let sala of salas" [value]="sala.id">
+          {{ sala.nome }}
+        </ion-select-option>
+      </ion-select>
+    </div>
+
+    <!-- Calendário -->
+    <div class="campo">
+      <div class="campo-label">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>Data</span>
+      </div>
+      <ion-datetime
+        presentation="date"
+        (ionChange)="onDataSelecionada($event)"
+        [min]="getDataMinima()"
+        [max]="getDataMaxima()"
+        locale="pt-BR"
+        class="campo-datetime">
+      </ion-datetime>
+    </div>
+
+    <!-- Blocos de Horários Disponíveis -->
+    <div *ngIf="salaSelecionada && dataSelecionada" class="horarios-section">
+      <div class="section-label">Blocos de Horários Disponíveis</div>
+      
+      <div *ngIf="gruposDisponiveis.length > 0" class="horarios-grid">
+        <div 
+          *ngFor="let grupo of gruposDisponiveis" 
+          class="horario-chip"
+          [class.selected]="grupoSelecionado === grupo"
+          (click)="grupoSelecionado = grupo">
+          {{ getGrupoLabel(grupo) }}
+        </div>
+      </div>
+      
+      <div *ngIf="gruposDisponiveis.length === 0 && !loading" class="empty-horarios">
+        <ion-icon name="time-outline"></ion-icon>
+        <p>Nenhum bloco de horários disponível para esta data</p>
+      </div>
+    </div>
+
+    <!-- Motivo (opcional) -->
+    <div class="campo" *ngIf="grupoSelecionado">
+      <div class="campo-label">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <span>Motivo (opcional)</span>
+      </div>
+      <ion-textarea 
+        [(ngModel)]="motivo" 
+        rows="2" 
+        placeholder="Descreva o motivo do agendamento"
+        class="campo-textarea">
+      </ion-textarea>
+    </div>
+
+    <!-- Botão Confirmar -->
+    <ion-button 
+      *ngIf="grupoSelecionado"
+      expand="block" 
+      class="btn-confirmar"
+      (click)="confirmarAgendamento()"
+      [disabled]="salvando">
+      <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+      {{ salvando ? 'Processando...' : 'Confirmar Agendamento' }}
+    </ion-button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando...</p>
+  </div>
+</ion-content>

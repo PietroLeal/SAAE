@@ -1,0 +1,203 @@
+.login-bg {
+  --background: none;
+}
+
+/* Layout dividido */
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+.left {
+  width: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.home-wrapper {
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem 2rem;
+  border-radius: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+/* Logo */
+.logo-badge {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+
+  ion-icon {
+    font-size: 2rem;
+    color: white;
+  }
+}
+
+/* Título */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1e3c72;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+/* Subtítulo */
+h2 {
+  font-size: 1.2rem;
+  color: #2a5298;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Texto */
+.description {
+  color: #4a5568;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.mission {
+  color: #2d3748;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e2e8f0;
+
+  strong {
+    color: #1e3c72;
+  }
+}
+
+/* Botão */
+.btn-login {
+  margin-top: 0.5rem;
+  --background: linear-gradient(135deg, #1e3c72, #2a5298);
+  --border-radius: 50px;
+  height: 52px;
+  font-weight: 600;
+  font-size: 1rem;
+  --box-shadow: 0 8px 20px rgba(30, 60, 114, 0.2);
+
+  transition: 0.3s;
+}
+
+.btn-login:hover {
+  transform: translateY(-2px);
+  --box-shadow: 0 12px 25px rgba(30, 60, 114, 0.3);
+}
+
+/* Rodapé */
+.footer-note {
+  text-align: center;
+  margin-top: 0.5rem;
+
+  p {
+    font-size: 0.85rem;
+    color: #718096;
+    margin: 0;
+  }
+
+  span {
+    color: #1e3c72;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Lado direito (visual) */
+.right {
+  width: 50%;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay opcional pra efeito */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.08), transparent);
+}
+
+.quote {
+  position: relative;
+  z-index: 1;
+  max-width: 80%;
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  backdrop-filter: blur(8px);
+
+  ion-icon {
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: white;
+    font-style: italic;
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+/* RESPONSIVO (CELULAR) */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .left, .right {
+    width: 100%;
+  }
+
+  .right {
+    display: none; /* some no mobile */
+  }
+
+  .left {
+    height: 100%;
+    align-items: flex-start;
+  }
+
+  .home-wrapper {
+    padding: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+}

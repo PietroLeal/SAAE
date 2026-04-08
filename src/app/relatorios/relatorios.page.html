@@ -1,0 +1,109 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <div class="header-actions">
+    <h2>Relatórios</h2>
+    <p class="subtitle">Visualize e exporte os agendamentos</p>
+  </div>
+
+  <!-- Cards de Estatísticas -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <div class="stat-value">{{ totalReservas }}</div>
+      <div class="stat-label">Total de Reservas</div>
+    </div>
+    <div class="stat-card success">
+      <ion-icon name="checkmark-circle-outline"></ion-icon>
+      <div class="stat-value">{{ reservasConfirmadas }}</div>
+      <div class="stat-label">Confirmadas</div>
+    </div>
+    <div class="stat-card danger">
+      <ion-icon name="close-circle-outline"></ion-icon>
+      <div class="stat-value">{{ reservasCanceladas }}</div>
+      <div class="stat-label">Canceladas</div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros-section">
+    <h3>Filtros</h3>
+    <div class="filtros-grid">
+      <ion-item class="filtro-item">
+        <ion-label position="stacked">Data Início</ion-label>
+        <ion-input type="date" [(ngModel)]="dataInicio" (ionChange)="aplicarFiltros()"></ion-input>
+      </ion-item>
+      <ion-item class="filtro-item">
+        <ion-label position="stacked">Data Fim</ion-label>
+        <ion-input type="date" [(ngModel)]="dataFim" (ionChange)="aplicarFiltros()"></ion-input>
+      </ion-item>
+      <ion-item class="filtro-item">
+        <ion-label position="stacked">Sala</ion-label>
+        <ion-select [(ngModel)]="salaFiltro" (ionChange)="aplicarFiltros()" placeholder="Todas">
+          <ion-select-option value="">Todas</ion-select-option>
+          <ion-select-option *ngFor="let sala of salas" [value]="sala">{{ sala }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item class="filtro-item">
+        <ion-label position="stacked">Status</ion-label>
+        <ion-select [(ngModel)]="statusFiltro" (ionChange)="aplicarFiltros()">
+          <ion-select-option value="todos">Todos</ion-select-option>
+          <ion-select-option value="confirmada">Confirmadas</ion-select-option>
+          <ion-select-option value="cancelada">Canceladas</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+    <div class="filtros-actions">
+      <ion-button fill="clear" (click)="limparFiltros()">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Limpar Filtros
+      </ion-button>
+      <ion-button (click)="exportarCSV()">
+        <ion-icon name="download-outline" slot="start"></ion-icon>
+        Exportar CSV
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Lista de Reservas -->
+  <div *ngIf="!loading">
+    <div *ngIf="reservasFiltradas.length > 0" class="reservas-list">
+      <div *ngFor="let reserva of reservasFiltradas" class="reserva-card">
+        <div class="reserva-header">
+          <ion-icon name="business-outline"></ion-icon>
+          <h3>{{ reserva.salaNome }}</h3>
+          <ion-badge [color]="getStatusColor(reserva.status)">{{ getStatusLabel(reserva.status) }}</ion-badge>
+        </div>
+        <div class="reserva-detalhes">
+          <div class="detalhe">
+            <ion-icon name="person-outline"></ion-icon>
+            <span>{{ reserva.usuarioNome }}</span>
+          </div>
+          <div class="detalhe">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span>{{ formatarData(reserva.data) }}</span>
+          </div>
+          <div class="detalhe">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>{{ getHorarioLabel(reserva.horario) }}</span>
+          </div>
+          <div class="detalhe" *ngIf="reserva.motivo">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>{{ reserva.motivo }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="reservasFiltradas.length === 0" class="empty-state">
+      <ion-icon name="bar-chart-outline"></ion-icon>
+      <h3>Nenhuma reserva encontrada</h3>
+      <p>Tente ajustar os filtros ou faça novos agendamentos.</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando relatórios...</p>
+  </div>
+</ion-content>
