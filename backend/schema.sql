@@ -1,6 +1,6 @@
 
-CREATE DATABASE IF NOT EXISTS reserva_salas;
-USE reserva_salas;
+CREATE DATABASE IF NOT EXISTS saaae;
+USE saaae;
 
 CREATE TABLE IF NOT EXISTS funcionarios (
   id INT AUTO_INCREMENT PRIMARY KEY,

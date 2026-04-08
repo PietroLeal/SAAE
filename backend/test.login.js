@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 
-const hashNoBanco = '$2a$10$hRrJH/fz3qNN60ZaJvU0SupThOeoeJhfdu3wyf/jOQDxTc4Dii6sW';
-const senhaDigitada = '@dm!n321';
+const hashNoBanco = '$2a$10$xFeDe/C9qJWYOo5D7h7bb.htK1ChaG1tZ5329Jm/0jkwe5.8y4LIG ';
+const senhaDigitada = 'admin123';
 
 const isValid = bcrypt.compareSync(senhaDigitada, hashNoBanco);
 console.log('Senha válida?', isValid);

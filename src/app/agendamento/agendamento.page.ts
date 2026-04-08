@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';  // <-- ADICIONE ESTA LINHA
 import { SalaService, Sala } from '../services/sala.service';
 import { ReservaService } from '../services/reserva.service';
 import { DisponibilidadeService, HORARIOS } from '../services/disponibilidade.service';
@@ -53,7 +54,8 @@ export class AgendamentoPage implements OnInit {
     private logService: LogService,
     private authService: AuthService,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private router: Router  // <-- ADICIONE ESTA LINHA
   ) {
     addIcons({
       calendarOutline,
@@ -212,13 +214,13 @@ export class AgendamentoPage implements OnInit {
     
     if (!user || !sala) return;
 
-    let mensagem = `Sala: ${sala.nome}\n`;
-    mensagem += `Data: ${this.formatarData(this.dataSelecionada)}\n`;
-    mensagem += `Bloco: ${this.grupoSelecionado.label}\n`;
+    let mensagem = `Sala: ${sala.nome}\n\n`;
+    mensagem += `Data: ${this.formatarData(this.dataSelecionada)}\n\n`;
+    mensagem += `Bloco: ${this.grupoSelecionado.label}\n\n`;
     if (this.motivo) {
-      mensagem += `Motivo: ${this.motivo}\n`;
+      mensagem += `Motivo: ${this.motivo}\n\n`;
     }
-    mensagem += `\nConfirmar este agendamento?`;
+    mensagem += `\n\nConfirmar este agendamento?`;
 
     const alert = await this.alertCtrl.create({
       header: 'Confirmar Agendamento',
@@ -309,7 +311,10 @@ export class AgendamentoPage implements OnInit {
       });
       
       this.presentToast('Agendamento realizado com sucesso!', 'success');
-      this.limparFormulario();
+      
+      setTimeout(() => {
+        this.router.navigate(['/dashboard']);
+      }, 1000);
       
     } catch (error) {
       console.error('Erro ao realizar agendamento:', error);

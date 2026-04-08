@@ -480,9 +480,47 @@ app.get('/api/:table/query', async (req, res) => {
     const values = [];
 
     for (const [key, value] of Object.entries(req.query)) {
-      if (['orderBy', 'order', 'limite'].includes(key)) continue;
-      conditions.push(`${key} = ?`);
-      values.push(value);
+      if (['orderBy', 'order', 'limite', 'page'].includes(key)) continue;
+      
+      if (typeof value !== 'string') continue;
+      
+      // Operador: _gte (maior ou igual)
+      if (key.endsWith('_gte')) {
+        const field = key.slice(0, -4);
+        conditions.push(`${field} >= ?`);
+        values.push(value);
+      }
+      // Operador: _lte (menor ou igual)
+      else if (key.endsWith('_lte')) {
+        const field = key.slice(0, -4);
+        conditions.push(`${field} <= ?`);
+        values.push(value);
+      }
+      // Operador: _in (lista de valores separados por vírgula)
+      else if (key.endsWith('_in') && value.includes(',')) {
+        const field = key.slice(0, -3);
+        const items = value.split(',');
+        const placeholders = items.map(() => '?').join(',');
+        conditions.push(`${field} IN (${placeholders})`);
+        values.push(...items);
+      }
+      // Operador: _ne (diferente)
+      else if (key.endsWith('_ne')) {
+        const field = key.slice(0, -3);
+        conditions.push(`${field} != ?`);
+        values.push(value);
+      }
+      // Operador: _like (busca parcial)
+      else if (key.endsWith('_like')) {
+        const field = key.slice(0, -5);
+        conditions.push(`${field} LIKE ?`);
+        values.push(`%${value}%`);
+      }
+      // Operador padrão (igualdade)
+      else {
+        conditions.push(`${key} = ?`);
+        values.push(value);
+      }
     }
 
     let sql = `SELECT * FROM ${req.params.table}`;
@@ -491,25 +529,25 @@ app.get('/api/:table/query', async (req, res) => {
       sql += ` WHERE ${conditions.join(' AND ')}`;
     }
 
-    const allowedColumns = ['id', 'nome', 'email', 'data', 'createdAt', 'updatedAt'];
-    let orderBy = req.query.orderBy;
-    let order = req.query.order === 'DESC' ? 'DESC' : 'ASC';
-
-    if (orderBy && !allowedColumns.includes(orderBy)) {
-      return res.status(400).json({ error: 'Coluna inválida' });
-    }
-
-    if (orderBy) {
+    // Ordenação
+    if (req.query.orderBy) {
+      const orderBy = req.query.orderBy;
+      const order = req.query.order === 'DESC' ? 'DESC' : 'ASC';
       sql += ` ORDER BY ${orderBy} ${order}`;
+    } else {
+      sql += ` ORDER BY id DESC`;
     }
 
+    // Limite
     if (req.query.limite) {
       sql += ` LIMIT ${parseInt(req.query.limite)}`;
     }
 
+    console.log('SQL:', sql, 'Values:', values);
     const [rows] = await pool.query(sql, values);
     res.json(rows);
   } catch (error) {
+    console.error('Erro na query:', error);
     res.status(500).json({ error: error.message });
   }
 });
