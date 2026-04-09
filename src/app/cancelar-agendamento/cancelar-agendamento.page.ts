@@ -5,6 +5,8 @@ import { IonicModule, AlertController, ToastController, NavController } from '@i
 import { ReservaService, Reserva } from '../services/reserva.service';
 import { LogService } from '../services/log.service';
 import { AuthService } from '../services/auth.service';
+import { NotificationService } from '../services/notificacao.service';
+import { RefreshService } from '../services/refresh.service';
 import { AppHeaderComponent } from '../app-header/app-header.component';
 import { addIcons } from 'ionicons';
 import { 
@@ -34,7 +36,9 @@ export class CancelarAgendamentoPage implements OnInit {
     private authService: AuthService,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private notificationService: NotificationService,
+    private refreshService: RefreshService
   ) {
     addIcons({
       trashOutline,
@@ -117,6 +121,8 @@ export class CancelarAgendamentoPage implements OnInit {
     try {
       await this.reservaService.cancelarReserva(reserva.id!);
       
+      await this.notificationService.notificarReservaCancelada(reserva.salaNome, reserva.data, reserva.horario);
+      
       await this.logService.registrarLog('AGENDAMENTO_CANCELADO', {
         reservaId: reserva.id,
         salaNome: reserva.salaNome,
@@ -124,8 +130,13 @@ export class CancelarAgendamentoPage implements OnInit {
         horario: reserva.horario
       });
       
+      // Remove da lista imediatamente
+      this.reservas = this.reservas.filter(r => r.id !== reserva.id);
+      
+      // Força atualização do dashboard
+      this.refreshService.triggerRefresh();
+      
       this.presentToast('Agendamento cancelado com sucesso!', 'success');
-      this.carregarReservas();
     } catch (error) {
       console.error('Erro ao cancelar reserva:', error);
       this.presentToast('Erro ao cancelar agendamento', 'danger');

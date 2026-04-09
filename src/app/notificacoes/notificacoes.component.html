@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Notificações</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="marcarTodasComoLidas()" *ngIf="temNotificacoesNaoLidas()">
+        <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+        Marcar todas como lidas
+      </ion-button>
+      <ion-button (click)="fechar()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="notificacoes.length === 0" class="empty-state">
+    <ion-icon name="notifications-off-outline"></ion-icon>
+    <p>Nenhuma notificação</p>
+  </div>
+
+  <ion-list *ngIf="notificacoes.length > 0">
+    <ion-item-sliding *ngFor="let notif of notificacoes">
+      <ion-item 
+        [class.nao-lida]="!notif.lida"
+        (click)="abrirNotificacao(notif)"
+        button>
+        <ion-icon 
+          [name]="notif.tipo === 'reserva' ? 'checkmark-circle-outline' : (notif.tipo === 'cancelamento' ? 'close-circle-outline' : 'information-circle-outline')"
+          [color]="notif.tipo === 'reserva' ? 'success' : (notif.tipo === 'cancelamento' ? 'danger' : 'primary')"
+          slot="start">
+        </ion-icon>
+        <ion-label>
+          <h3 [class.font-bold]="!notif.lida">{{ notif.titulo }}</h3>
+          <p>{{ notif.mensagem }}</p>
+          <p class="data">{{ notif.data | date:'dd/MM/yyyy HH:mm' }}</p>
+        </ion-label>
+        <ion-badge *ngIf="!notif.lida" color="danger" slot="end">Nova</ion-badge>
+      </ion-item>
+      
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="removerNotificacao(notif.id)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <div class="footer-actions" *ngIf="notificacoes.length > 0">
+    <ion-button fill="clear" color="danger" (click)="limparTodas()" size="small">
+      <ion-icon name="trash-outline" slot="start"></ion-icon>
+      Limpar todas
+    </ion-button>
+  </div>
+</ion-content>

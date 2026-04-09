@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController, ToastController } from '@ionic/angular';
-import { Router } from '@angular/router';  // <-- ADICIONE ESTA LINHA
+import { Router } from '@angular/router';
 import { SalaService, Sala } from '../services/sala.service';
 import { ReservaService } from '../services/reserva.service';
 import { DisponibilidadeService, HORARIOS } from '../services/disponibilidade.service';
 import { LogService } from '../services/log.service';
 import { AuthService } from '../services/auth.service';
+import { NotificationService } from '../services/notificacao.service';
 import { AppHeaderComponent } from '../app-header/app-header.component';
 import { addIcons } from 'ionicons';
 import { 
@@ -55,7 +56,8 @@ export class AgendamentoPage implements OnInit {
     private authService: AuthService,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private router: Router  // <-- ADICIONE ESTA LINHA
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     addIcons({
       calendarOutline,
@@ -300,6 +302,8 @@ export class AgendamentoPage implements OnInit {
         }
         
         await this.reservaService.addReserva(reservaData);
+        
+        await this.notificationService.notificarReservaCriada(sala.nome, this.dataSelecionada, horario);
       }
       
       await this.logService.registrarLog('AGENDAMENTO_CRIADO', {

@@ -5,6 +5,7 @@ import { IonicModule, NavController, AlertController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { personOutline, mailOutline, callOutline, briefcaseOutline, lockClosedOutline, eyeOutline, eyeOffOutline, shieldCheckmarkOutline, personAddOutline } from 'ionicons/icons';
 import { ApiService } from '../services/api.service';
+import { NotificationService } from '../services/notificacao.service';
 import { AppHeaderComponent } from '../app-header/app-header.component';
 
 @Component({
@@ -31,7 +32,8 @@ export class CadastrofuncionarioPage implements AfterViewInit {
     public navCtrl: NavController,
     public formbuilder: FormBuilder,
     public alertCtrl: AlertController,
-    private api: ApiService
+    private api: ApiService,
+    private notificationService: NotificationService
   ) {
     addIcons({
       personOutline,
@@ -98,6 +100,8 @@ export class CadastrofuncionarioPage implements AfterViewInit {
           password: this.registerForm.value.password,
           createdAt: new Date()
         });
+        
+        await this.notificationService.notificarBoasVindas(this.registerForm.value.name);
         
         this.presentAlert('Sucesso', `Funcionário ${this.registerForm.value.name} cadastrado com sucesso!`);
         this.loading = false;
