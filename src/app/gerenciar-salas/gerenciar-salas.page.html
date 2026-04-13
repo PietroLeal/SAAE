@@ -22,7 +22,7 @@
       <ion-label>
         <h2>{{ sala.nome }}</h2>
         <p>Capacidade: {{ sala.capacidade }} pessoas</p>
-        <p *ngIf="sala.recursos?.length">Recursos: {{ sala.recursos.join(', ') }}</p>
+        <p *ngIf="sala.recursos">Recursos: {{ formatarRecursos(sala.recursos) }}</p>
         <p *ngIf="sala.descricao">{{ sala.descricao }}</p>
         <ion-badge [color]="sala.ativa ? 'success' : 'danger'">
           {{ sala.ativa ? 'Ativa' : 'Inativa' }}
@@ -70,25 +70,25 @@
         <ion-input type="number" [(ngModel)]="salaAtual.capacidade" placeholder="Número de pessoas"></ion-input>
       </ion-item>
 
-<ion-item>
-  <ion-label position="stacked">Recursos</ion-label>
-  <div class="recursos-input">
-    <ion-select 
-      [(ngModel)]="recursoSelecionado" 
-      placeholder="Selecione um recurso"
-      (ionChange)="adicionarRecurso()">
-      <ion-select-option *ngFor="let rec of recursosDisponiveis" [value]="rec.id">
-        {{ rec.nome }}
-      </ion-select-option>
-    </ion-select>
-  </div>
-  <div class="recursos-list" *ngIf="salaAtual.recursos?.length">
-    <ion-chip *ngFor="let recId of salaAtual.recursos" (click)="removerRecurso(recId)">
-      {{ getRecursoNome(recId) }}
-      <ion-icon name="close-circle-outline"></ion-icon>
-    </ion-chip>
-  </div>
-</ion-item>
+      <ion-item>
+        <ion-label position="stacked">Recursos</ion-label>
+        <div class="recursos-input">
+          <ion-select 
+            [(ngModel)]="recursoSelecionado" 
+            placeholder="Selecione um recurso"
+            (ionChange)="adicionarRecurso()">
+            <ion-select-option *ngFor="let rec of recursosDisponiveis" [value]="rec.id">
+              {{ rec.nome }}
+            </ion-select-option>
+          </ion-select>
+        </div>
+        <div class="recursos-list" *ngIf="salaAtual.recursos?.length">
+          <ion-chip *ngFor="let recId of salaAtual.recursos" (click)="removerRecurso(recId)">
+            {{ getRecursoNome(recId) }}
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </ion-chip>
+        </div>
+      </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Descrição</ion-label>

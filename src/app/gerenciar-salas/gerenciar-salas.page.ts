@@ -19,7 +19,9 @@ import {
   bookOutline, 
   basketballOutline,
   businessOutline,
-  closeCircleOutline
+  closeCircleOutline,
+  arrowForwardOutline,
+  chatbubbleOutline
 } from 'ionicons/icons';
 
 interface Recurso {
@@ -71,7 +73,9 @@ export class GerenciarSalasPage implements OnInit {
       bookOutline,
       basketballOutline,
       businessOutline,
-      closeCircleOutline
+      closeCircleOutline,
+      arrowForwardOutline,
+      chatbubbleOutline
     });
   }
 
@@ -96,6 +100,17 @@ export class GerenciarSalasPage implements OnInit {
   getRecursoNome(recId: string): string {
     const recurso = this.recursosDisponiveis.find(r => r.id?.toString() === recId);
     return recurso?.nome || recId;
+  }
+
+  formatarRecursos(recursos: any): string {
+    if (!recursos) return '';
+    if (Array.isArray(recursos)) {
+      return recursos.join(', ');
+    }
+    if (typeof recursos === 'string') {
+      return recursos;
+    }
+    return String(recursos);
   }
 
   adicionarRecurso() {
