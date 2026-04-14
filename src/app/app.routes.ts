@@ -91,10 +91,18 @@ export const routes: Routes = [
     loadComponent: () => import('./perfis/perfis.page').then(m => m.PerfisPage),
     canActivate: [authGuard, roleGuard('gerenciarPerfis')]
   },
+    {
+    path: 'minhas-reservas',
+    loadComponent: () => import('./minhas-reservas/minhas-reservas.page').then( m => m.MinhasReservasPage),
+    canActivate: [authGuard]
+
+  },
+
   {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',
   },
+
 
 ];

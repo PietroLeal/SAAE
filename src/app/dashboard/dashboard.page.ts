@@ -89,7 +89,7 @@ export class DashboardPage implements OnInit {
       happyOutline
     });
   }
-
+  
   async ngOnInit() {
     this.refreshService.refresh$.subscribe(async () => {
       console.log('🔄 Recarregando permissões no dashboard...');
@@ -105,6 +105,11 @@ export class DashboardPage implements OnInit {
     this.cdr.detectChanges();
   }
 
+
+  openMinhasReservas() {
+  this.navCtrl.navigateForward('/minhas-reservas');
+
+  }
   ionViewWillEnter() {
     this.carregarReservas();
   }

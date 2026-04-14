@@ -60,7 +60,14 @@
             <ion-card-content>Cancelar agendamento</ion-card-content>
           </ion-card>
         </ion-col>
-
+        <!-- Minhas Reservas - Card para acessar todas as reservas -->
+        <ion-col size="6">
+          <ion-card class="dashboard-card" (click)="openMinhasReservas()">
+            <ion-icon name="calendar-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Minhas Reservas</ion-card-title>
+            <ion-card-content>Ver todos os meus agendamentos</ion-card-content>
+          </ion-card>
+        </ion-col>
         <!-- Consulta Geral -->
         <ion-col size="6" *ngIf="permissoes?.verRelatorios">
           <ion-card class="dashboard-card" (click)="openConsultaGeral()">

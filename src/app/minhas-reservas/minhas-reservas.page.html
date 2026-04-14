@@ -1,0 +1,143 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <!-- Cabeçalho -->
+  <div class="header-section">
+    <div class="header-title">
+      <h1>Minhas Reservas</h1>
+      <p>Gerencie todos os seus agendamentos</p>
+    </div>
+    <ion-button fill="solid" color="primary" (click)="agendarNova()" class="btn-nova-reserva">
+      <ion-icon name="calendar-outline" slot="start"></ion-icon>
+      Nova Reserva
+    </ion-button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros-section">
+    <div class="filtros-header">
+      <ion-icon name="filter-outline"></ion-icon>
+      <span>Filtrar por</span>
+      <ion-button fill="clear" size="small" (click)="limparFiltros()" *ngIf="filtroStatus !== 'todas' || filtroData">
+        <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+        Limpar
+      </ion-button>
+    </div>
+    
+    <div class="filtros-row">
+      <!-- Filtro por status -->
+      <div class="filtro-group">
+        <ion-select 
+          [(ngModel)]="filtroStatus" 
+          (ionChange)="onFiltroStatusChange()"
+          placeholder="Status"
+          interface="popover"
+          class="filtro-select">
+          <ion-select-option *ngFor="let opt of statusOptions" [value]="opt.valor">
+            <div class="select-option">
+              <ion-icon [name]="opt.icon" slot="start"></ion-icon>
+              <span>{{ opt.label }}</span>
+            </div>
+          </ion-select-option>
+        </ion-select>
+      </div>
+      
+      <!-- Filtro por data -->
+      <div class="filtro-group">
+        <ion-input 
+          type="date"
+          [(ngModel)]="filtroData"
+          (ionChange)="onFiltroDataChange()"
+          placeholder="Filtrar por data"
+          class="filtro-data">
+        </ion-input>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando suas reservas...</p>
+  </div>
+
+  <!-- Lista de Reservas -->
+  <div *ngIf="!loading">
+    <!-- Sem reservas -->
+    <div *ngIf="reservasFiltradas.length === 0" class="empty-state">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <h3>Nenhuma reserva encontrada</h3>
+      <p *ngIf="reservas.length === 0">
+        Você ainda não fez nenhum agendamento.
+      </p>
+      <p *ngIf="reservas.length > 0">
+        Nenhuma reserva corresponde aos filtros selecionados.
+      </p>
+      <ion-button fill="outline" color="primary" (click)="agendarNova()" *ngIf="reservas.length === 0">
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        Fazer primeira reserva
+      </ion-button>
+      <ion-button fill="outline" color="medium" (click)="limparFiltros()" *ngIf="reservas.length > 0 && reservasFiltradas.length === 0">
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Limpar filtros
+      </ion-button>
+    </div>
+
+    <!-- Cards de reservas -->
+    <div class="reservas-grid">
+      <ion-card *ngFor="let reserva of reservasFiltradas" class="reserva-card" [class.cancelada]="reserva.status === 'cancelada'">
+        <div class="card-header">
+          <div class="sala-info">
+            <ion-icon name="business-outline"></ion-icon>
+            <ion-card-title>{{ reserva.salaNome }}</ion-card-title>
+          </div>
+          <ion-badge [color]="getStatusBadgeColor(reserva.status)" class="status-badge">
+            {{ getStatusLabel(reserva.status) }}
+          </ion-badge>
+        </div>
+
+        <ion-card-content>
+          <div class="info-row">
+            <div class="info-item">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>{{ formatarData(reserva.data) }}</span>
+            </div>
+            <div class="info-item">
+              <ion-icon name="time-outline"></ion-icon>
+              <span>{{ getHorarioLabel(reserva.horario) }}</span>
+            </div>
+          </div>
+          
+          <div class="info-row" *ngIf="reserva.motivo">
+            <div class="info-item motivo">
+              <ion-icon name="document-text-outline"></ion-icon>
+              <span class="motivo-texto">{{ reserva.motivo }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <ion-button 
+              fill="clear" 
+              size="small" 
+              (click)="verDetalhes(reserva)"
+              class="btn-detalhes">
+              <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+              Detalhes
+            </ion-button>
+            
+            <ion-button 
+              *ngIf="podeCancelar(reserva)"
+              fill="clear" 
+              size="small" 
+              color="danger"
+              (click)="cancelarReserva(reserva)"
+              class="btn-cancelar">
+              <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+              Cancelar
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>
