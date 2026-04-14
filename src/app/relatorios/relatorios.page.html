@@ -58,9 +58,22 @@
         <ion-icon name="close-outline" slot="start"></ion-icon>
         Limpar Filtros
       </ion-button>
-      <ion-button (click)="exportarCSV()">
-        <ion-icon name="download-outline" slot="start"></ion-icon>
-        Exportar CSV
+    </div>
+  </div>
+
+  <!-- Botões de Exportação -->
+  <div class="export-buttons-section">
+    <h3>Exportar Relatório</h3>
+    <div class="export-buttons-grid">
+      
+      <ion-button color="primary" expand="block" (click)="exportarDOCX()" class="export-btn">
+        <ion-icon name="document-text-outline" slot="start"></ion-icon>
+        Exportar DOCX
+      </ion-button>
+      
+      <ion-button color="primary" expand="block" (click)="exportarPDF()" class="export-btn">
+        <ion-icon name="print-outline" slot="start"></ion-icon>
+        Exportar PDF
       </ion-button>
     </div>
   </div>

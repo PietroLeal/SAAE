@@ -23,24 +23,6 @@
       </div>
     </div>
 
-    <!-- Reservas recentes -->
-    <ion-card *ngFor="let reserva of recentBookings; let i = index" class="recent-booking-card ion-margin-bottom">
-      <ion-card-header>
-        <ion-card-title>Reserva: {{ reserva.salaNome }}</ion-card-title>
-        <ion-card-subtitle>{{ formatarData(reserva.data) }} | {{ getHorarioLabel(reserva.horario) }}</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        Sala: {{ reserva.salaNome }} <br>
-        Status: <ion-badge [color]="reserva.status === 'confirmada' ? 'success' : reserva.status === 'cancelada' ? 'danger' : 'warning'">
-          {{ reserva.status === 'confirmada' ? 'Confirmada' : reserva.status === 'cancelada' ? 'Cancelada' : 'Pendente' }}
-        </ion-badge>
-      </ion-card-content>
-      <ion-card-content *ngIf="reserva.status !== 'cancelada'">
-        <ion-button color="danger" fill="clear" (click)="removerReserva(i)">
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
 
     <!-- TODOS OS CARDS EM UM ÚNICO GRID -->
     <ion-grid>

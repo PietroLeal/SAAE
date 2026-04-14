@@ -17,8 +17,28 @@ import {
   personOutline,
   documentTextOutline,
   checkmarkCircleOutline,
-  closeCircleOutline
+  closeCircleOutline,
+  printOutline,
+  documentOutline
 } from 'ionicons/icons';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { saveAs } from 'file-saver';
+import { 
+  Document, 
+  Packer, 
+  Paragraph, 
+  TextRun, 
+  Table, 
+  TableRow, 
+  TableCell, 
+  WidthType,
+  BorderStyle,
+  AlignmentType,
+  HeadingLevel,
+  ImageRun,
+  VerticalAlign
+} from 'docx';
 
 interface ReservaRelatorio {
   id: number;
@@ -85,7 +105,9 @@ export class RelatoriosPage implements OnInit {
       personOutline,
       documentTextOutline,
       checkmarkCircleOutline,
-      closeCircleOutline
+      closeCircleOutline,
+      printOutline,
+      documentOutline
     });
   }
 
@@ -195,121 +217,483 @@ export class RelatoriosPage implements OnInit {
     }
   }
 
-  async exportarCSV() {
+  exportarCSV() {
     if (this.reservasFiltradas.length === 0) {
       this.presentToast('Não há dados para exportar', 'warning');
       return;
     }
 
-    if (this.statusFiltro === 'todos') {
-      const confirmadas = this.reservasFiltradas.filter(r => r.status === 'confirmada');
-      const canceladas = this.reservasFiltradas.filter(r => r.status === 'cancelada');
-      
-      let html = `
-        <html>
-        <head>
-          <meta charset="UTF-8">
-          <title>Relatório de Agendamentos</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 40px; }
-            h1 { color: #0052d4; border-bottom: 2px solid #0052d4; padding-bottom: 10px; }
-            h2 { color: #333; margin-top: 30px; }
-            .section { margin-bottom: 40px; }
-            table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-            th { background: #0052d4; color: white; padding: 12px; text-align: left; }
-            td { padding: 10px; border-bottom: 1px solid #ddd; }
-            .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }
-            .stats { background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 20px 0; }
-            .stats span { font-weight: bold; color: #0052d4; }
-          </style>
-        </head>
-        <body>
-          <h1>Relatório de Agendamentos</h1>
-          <div class="stats">
-            <strong>Período:</strong> ${this.dataInicio || 'Todas'} até ${this.dataFim || 'Todas'} | 
-            <strong>Total:</strong> ${this.reservasFiltradas.length} | 
-            <strong>Confirmadas:</strong> ${confirmadas.length} | 
-            <strong>Canceladas:</strong> ${canceladas.length}
-          </div>
-      `;
-      
-      if (confirmadas.length > 0) {
-        html += `
-          <div class="section">
-            <h2>✅ Reservas Confirmadas (${confirmadas.length})</h2>
-            <table>
-              <tr>
-                <th>Sala</th>
-                <th>Usuário</th>
-                <th>Data</th>
-                <th>Horário</th>
-                <th>Motivo</th>
-              </tr>
-              ${confirmadas.map(r => `
-                <tr>
-                  <td>${r.salaNome}</td>
-                  <td>${r.usuarioNome}</td>
-                  <td>${this.formatarData(r.data)}</td>
-                  <td>${this.getHorarioLabel(r.horario)}</td>
-                  <td>${r.motivo || '-'}</td>
-                </tr>
-              `).join('')}
-            </table>
-          </div>
-        `;
-      }
-      
-      if (canceladas.length > 0) {
-        html += `
-          <div class="section">
-            <h2>❌ Reservas Canceladas (${canceladas.length})</h2>
-            <table>
-              <tr>
-                <th>Sala</th>
-                <th>Usuário</th>
-                <th>Data</th>
-                <th>Horário</th>
-                <th>Motivo</th>
-              </tr>
-              ${canceladas.map(r => `
-                <tr>
-                  <td>${r.salaNome}</td>
-                  <td>${r.usuarioNome}</td>
-                  <td>${this.formatarData(r.data)}</td>
-                  <td>${this.getHorarioLabel(r.horario)}</td>
-                  <td>${r.motivo || '-'}</td>
-                </tr>
-              `).join('')}
-            </table>
-          </div>
-        `;
-      }
-      
-      html += `
-          <div class="footer">
-            Relatório gerado em ${new Date().toLocaleString('pt-BR')}
-          </div>
-        </body>
-        </html>
-      `;
-      
-      this.baixarArquivo(html, `relatorio_agendamentos_${new Date().toISOString().split('T')[0]}.html`, 'text/html');
-      
-    } else {
-      let csv = '\uFEFF';
-      csv += '"Sala";"Usuário";"Data";"Horário";"Status";"Motivo"\n';
-      
-      for (const r of this.reservasFiltradas) {
-        csv += `"${r.salaNome}";`;
-        csv += `"${r.usuarioNome}";`;
-        csv += `"${this.formatarData(r.data)}";`;
-        csv += `"${this.getHorarioLabel(r.horario)}";`;
-        csv += `"${r.status === 'confirmada' ? 'Confirmada' : r.status === 'cancelada' ? 'Cancelada' : 'Pendente'}";`;
-        csv += `"${r.motivo || ''}"\n`;
-      }
-      
-      this.baixarArquivo(csv, `relatorio_agendamentos_${new Date().toISOString().split('T')[0]}.csv`, 'text/csv;charset=utf-8;');
+    const confirmadas = this.reservasFiltradas.filter(r => r.status === 'confirmada');
+    const canceladas = this.reservasFiltradas.filter(r => r.status === 'cancelada');
+    
+    let csv = '\uFEFF';
+    
+    csv += `"="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="\n`;
+    csv += `"                 SISTEMA DE AGENDAMENTO DE AMBIENTES ESCOLARES"\n`;
+    csv += `"="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="="\n\n`;
+    csv += `"RELATÓRIO DE AGENDAMENTOS"\n`;
+    csv += `"${"=".repeat(50)}"\n\n`;
+    csv += `"Gerado em: ${new Date().toLocaleString('pt-BR')}"\n`;
+    csv += `"Período: ${this.dataInicio || 'Todas'} até ${this.dataFim || 'Todas'}"\n`;
+    csv += `"Sala: ${this.salaFiltro || 'Todas'}"\n`;
+    csv += `"Status: ${this.statusFiltro === 'todos' ? 'Todos' : this.getStatusLabel(this.statusFiltro)}"\n\n`;
+    
+    csv += `"📊 ESTATÍSTICAS"\n`;
+    csv += `"${"-".repeat(40)}"\n`;
+    csv += `"Total de reservas: ${this.reservasFiltradas.length}"\n`;
+    csv += `"Confirmadas: ${confirmadas.length}"\n`;
+    csv += `"Canceladas: ${canceladas.length}"\n\n`;
+    
+    csv += `"📋 LISTA DE RESERVAS"\n`;
+    csv += `"${"-".repeat(40)}"\n\n`;
+    
+    csv += `"Sala";"Usuário";"Data";"Horário";"Status";"Motivo"\n`;
+    csv += `"${"-".repeat(80)}"\n`;
+    
+    for (const r of this.reservasFiltradas) {
+      const linha = [
+        `"${r.salaNome.replace(/"/g, '""')}"`,
+        `"${r.usuarioNome.replace(/"/g, '""')}"`,
+        `"${this.formatarData(r.data)}"`,
+        `"${this.getHorarioLabel(r.horario)}"`,
+        `"${this.getStatusLabel(r.status)}"`,
+        `"${(r.motivo || '').replace(/"/g, '""')}"`
+      ].join(';');
+      csv += linha + '\n';
     }
+    
+    csv += `\n\n`;
+    csv += `"${"=".repeat(80)}"\n`;
+    csv += `"Relatório gerado automaticamente pelo Sistema de Agendamento de Ambientes Escolares"\n`;
+    csv += `"${"=".repeat(80)}"\n`;
+    
+    this.baixarArquivo(csv, `relatorio_agendamentos_${new Date().toISOString().split('T')[0]}.csv`, 'text/csv;charset=utf-8;');
+  }
+
+async exportarDOCX() {
+  if (this.reservasFiltradas.length === 0) {
+    this.presentToast('Não há dados para exportar', 'warning');
+    return;
+  }
+
+  const confirmadas = this.reservasFiltradas.filter(r => r.status === 'confirmada');
+  const canceladas = this.reservasFiltradas.filter(r => r.status === 'cancelada');
+
+  const children: any[] = [];
+
+  // ConteúDO PRINCIPAL (sem cabeçalho e rodapé repetidos)
+  children.push(
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "RELATÓRIO DE AGENDAMENTOS",
+          bold: true,
+          size: 28,
+          color: "333333"
+        })
+      ],
+      alignment: AlignmentType.CENTER,
+      spacing: { after: 200 }
+    })
+  );
+
+  // Informações do relatório
+  children.push(
+    new Paragraph({
+      children: [
+        new TextRun({ text: "Gerado em: ", bold: true }),
+        new TextRun(new Date().toLocaleString('pt-BR'))
+      ],
+      spacing: { after: 80 }
+    }),
+    new Paragraph({
+      children: [
+        new TextRun({ text: "Período: ", bold: true }),
+        new TextRun(`${this.dataInicio || 'Todas'} até ${this.dataFim || 'Todas'}`)
+      ],
+      spacing: { after: 80 }
+    }),
+    new Paragraph({
+      children: [
+        new TextRun({ text: "Sala: ", bold: true }),
+        new TextRun(`${this.salaFiltro || 'Todas'}`)
+      ],
+      spacing: { after: 80 }
+    }),
+    new Paragraph({
+      children: [
+        new TextRun({ text: "Status: ", bold: true }),
+        new TextRun(`${this.statusFiltro === 'todos' ? 'Todos' : this.getStatusLabel(this.statusFiltro)}`)
+      ],
+      spacing: { after: 200 }
+    })
+  );
+
+  // Estatísticas
+  children.push(
+    new Paragraph({
+      children: [
+        new TextRun({ text: "ESTATÍSTICAS", bold: true, size: 24, color: "0052d4" })
+      ],
+      spacing: { after: 100 }
+    }),
+    new Paragraph({
+      children: [
+        new TextRun({ text: `Total de Reservas: ${this.reservasFiltradas.length}`, bold: true }),
+        new TextRun({ text: `  |  Confirmadas: ${confirmadas.length}`, bold: true, color: "28a745" }),
+        new TextRun({ text: `  |  Canceladas: ${canceladas.length}`, bold: true, color: "dc3545" })
+      ],
+      spacing: { after: 200 }
+    })
+  );
+
+  // Função para criar tabela
+  const criarTabelaBonita = (titulo: string, dados: ReservaRelatorio[], cor: string) => {
+    const elementos: any[] = [];
+    
+    elementos.push(
+      new Paragraph({
+        children: [
+          new TextRun({ text: titulo, bold: true, size: 22, color: cor })
+        ],
+        spacing: { before: 200, after: 100 }
+      })
+    );
+    
+    if (dados.length === 0) {
+      elementos.push(
+        new Paragraph({
+          children: [new TextRun({ text: "Nenhuma reserva encontrada.", italics: true, color: "999999" })],
+          spacing: { after: 100 }
+        })
+      );
+      return elementos;
+    }
+    
+    const rows: TableRow[] = [];
+    
+    rows.push(
+      new TableRow({
+        children: [
+          new TableCell({ 
+            children: [new Paragraph({ children: [new TextRun({ text: "Sala", bold: true, color: "ffffff" })] })], 
+            shading: { fill: cor },
+            width: { size: 20, type: WidthType.PERCENTAGE }
+          }),
+          new TableCell({ 
+            children: [new Paragraph({ children: [new TextRun({ text: "Usuário", bold: true, color: "ffffff" })] })], 
+            shading: { fill: cor },
+            width: { size: 20, type: WidthType.PERCENTAGE }
+          }),
+          new TableCell({ 
+            children: [new Paragraph({ children: [new TextRun({ text: "Data", bold: true, color: "ffffff" })] })], 
+            shading: { fill: cor },
+            width: { size: 15, type: WidthType.PERCENTAGE }
+          }),
+          new TableCell({ 
+            children: [new Paragraph({ children: [new TextRun({ text: "Horário", bold: true, color: "ffffff" })] })], 
+            shading: { fill: cor },
+            width: { size: 25, type: WidthType.PERCENTAGE }
+          }),
+          new TableCell({ 
+            children: [new Paragraph({ children: [new TextRun({ text: "Motivo", bold: true, color: "ffffff" })] })], 
+            shading: { fill: cor },
+            width: { size: 20, type: WidthType.PERCENTAGE }
+          })
+        ]
+      })
+    );
+    
+    for (let i = 0; i < dados.length; i++) {
+      const item = dados[i];
+      const isEven = i % 2 === 0;
+      rows.push(
+        new TableRow({
+          children: [
+            new TableCell({ 
+              children: [new Paragraph(item.salaNome)],
+              shading: isEven ? { fill: "f8f9fa" } : undefined
+            }),
+            new TableCell({ 
+              children: [new Paragraph(item.usuarioNome)],
+              shading: isEven ? { fill: "f8f9fa" } : undefined
+            }),
+            new TableCell({ 
+              children: [new Paragraph(this.formatarData(item.data))],
+              shading: isEven ? { fill: "f8f9fa" } : undefined
+            }),
+            new TableCell({ 
+              children: [new Paragraph(this.getHorarioLabel(item.horario))],
+              shading: isEven ? { fill: "f8f9fa" } : undefined
+            }),
+            new TableCell({ 
+              children: [new Paragraph(item.motivo || '-')],
+              shading: isEven ? { fill: "f8f9fa" } : undefined
+            })
+          ]
+        })
+      );
+    }
+    
+    elementos.push(
+      new Table({
+        rows: rows,
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        borders: {
+          top: { style: BorderStyle.SINGLE, size: 1, color: "cccccc" },
+          bottom: { style: BorderStyle.SINGLE, size: 1, color: "cccccc" },
+          left: { style: BorderStyle.SINGLE, size: 1, color: "cccccc" },
+          right: { style: BorderStyle.SINGLE, size: 1, color: "cccccc" },
+          insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "cccccc" },
+          insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "cccccc" }
+        }
+      })
+    );
+    
+    return elementos;
+  };
+
+  children.push(...criarTabelaBonita("RESERVAS CONFIRMADAS", confirmadas, "28a745"));
+  children.push(...criarTabelaBonita("RESERVAS CANCELADAS", canceladas, "dc3545"));
+
+  // Criar o documento com HEADER e FOOTER
+  const doc = new Document({
+    sections: [{
+      properties: {
+        page: {
+          margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+        }
+      },
+      // HEADER - aparece em todas as páginas
+      headers: {
+        default: new Header({
+          children: [
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "SISTEMA DE AGENDAMENTO DE AMBIENTES ESCOLARES",
+                  bold: true,
+                  size: 24,
+                  color: "0052d4"
+                })
+              ],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 100 }
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "═══════════════════════════════════════════════════════════════════════════════",
+                  color: "0052d4"
+                })
+              ],
+              alignment: AlignmentType.CENTER
+            })
+          ]
+        })
+      },
+      // FOOTER - aparece em todas as páginas
+      footers: {
+        default: new Footer({
+          children: [
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "═══════════════════════════════════════════════════════════════════════════════",
+                  color: "cccccc"
+                })
+              ],
+              alignment: AlignmentType.CENTER,
+              spacing: { before: 100 }
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "Sistema de Agendamento de Ambientes Escolares",
+                  bold: true,
+                  size: 18,
+                  color: "666666"
+                })
+              ],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 50 }
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "Relatório gerado automaticamente pelo sistema",
+                  size: 16,
+                  color: "999999"
+                })
+              ],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 50 }
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Gerado em: ${new Date().toLocaleString('pt-BR')}`,
+                  size: 16,
+                  color: "999999"
+                })
+              ],
+              alignment: AlignmentType.CENTER
+            })
+          ]
+        })
+      },
+      children: children
+    }]
+  });
+
+  const buffer = await Packer.toBlob(doc);
+  saveAs(buffer, `relatorio_agendamentos_${new Date().toISOString().split('T')[0]}.docx`);
+  this.presentToast('Documento DOCX exportado com sucesso!', 'success');
+}
+
+  exportarPDF() {
+    if (this.reservasFiltradas.length === 0) {
+      this.presentToast('Não há dados para exportar', 'warning');
+      return;
+    }
+
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4'
+    });
+    
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    
+    // Cabeçalho decorativo
+    doc.setFillColor(0, 82, 212);
+    doc.rect(0, 0, pageWidth, 15, 'F');
+    
+    doc.setFillColor(240, 248, 255);
+    doc.rect(0, 15, pageWidth, 5, 'F');
+    
+    // Título
+    doc.setFontSize(22);
+    doc.setTextColor(0, 82, 212);
+    doc.text("SISTEMA DE AGENDAMENTO DE AMBIENTES ESCOLARES", pageWidth / 2, 30, { align: 'center' });
+    
+    doc.setFontSize(16);
+    doc.setTextColor(51, 51, 51);
+    doc.text("RELATÓRIO DE AGENDAMENTOS", pageWidth / 2, 42, { align: 'center' });
+    
+    // Linha decorativa
+    doc.setDrawColor(0, 82, 212);
+    doc.setLineWidth(0.5);
+    doc.line(40, 48, pageWidth - 40, 48);
+    
+    // Informações do relatório
+    doc.setFontSize(9);
+    doc.setTextColor(100, 100, 100);
+    let yPos = 60;
+    
+    doc.text(`📅 Gerado em: ${new Date().toLocaleString('pt-BR')}`, 20, yPos);
+    yPos += 6;
+    doc.text(`📆 Período: ${this.dataInicio || 'Todas'} até ${this.dataFim || 'Todas'}`, 20, yPos);
+    yPos += 6;
+    doc.text(`🏫 Sala: ${this.salaFiltro || 'Todas'}`, 20, yPos);
+    yPos += 6;
+    doc.text(`📌 Status: ${this.statusFiltro === 'todos' ? 'Todos' : this.getStatusLabel(this.statusFiltro)}`, 20, yPos);
+    yPos += 15;
+    
+    // Estatísticas em cards
+    const confirmadas = this.reservasFiltradas.filter(r => r.status === 'confirmada');
+    const canceladas = this.reservasFiltradas.filter(r => r.status === 'cancelada');
+    
+    doc.setFillColor(240, 248, 255);
+    doc.roundedRect(20, yPos, pageWidth - 40, 25, 3, 3, 'F');
+    doc.setFontSize(10);
+    doc.setTextColor(0, 82, 212);
+    doc.text(`📊 ESTATÍSTICAS`, 25, yPos + 6);
+    doc.setFontSize(9);
+    doc.setTextColor(51, 51, 51);
+    doc.text(`Total: ${this.reservasFiltradas.length}  |  ✅ Confirmadas: ${confirmadas.length}  |  ❌ Canceladas: ${canceladas.length}`, 25, yPos + 16);
+    yPos += 35;
+    
+    // Tabela de dados
+    const tableColumn = ["Sala", "Usuário", "Data", "Horário", "Status", "Motivo"];
+    const tableRows = this.reservasFiltradas.map(r => [
+      r.salaNome,
+      r.usuarioNome,
+      this.formatarData(r.data),
+      this.getHorarioLabel(r.horario),
+      this.getStatusLabel(r.status),
+      r.motivo || '-'
+    ]);
+    
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: yPos,
+      theme: 'striped',
+      headStyles: {
+        fillColor: [0, 82, 212],
+        textColor: 255,
+        fontStyle: 'bold',
+        halign: 'center',
+        fontSize: 8
+      },
+      bodyStyles: {
+        fontSize: 7,
+        cellPadding: 2
+      },
+      columnStyles: {
+        0: { cellWidth: 35 },
+        1: { cellWidth: 40 },
+        2: { cellWidth: 25 },
+        3: { cellWidth: 50 },
+        4: { cellWidth: 25 },
+        5: { cellWidth: 45 }
+      },
+      styles: {
+        overflow: 'linebreak',
+        valign: 'middle'
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245]
+      },
+      margin: { left: 20, right: 20 }
+    });
+    
+    // Rodapé
+    const pageCount = doc.getNumberOfPages();
+    
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      
+      doc.setDrawColor(200, 200, 200);
+      doc.setLineWidth(0.3);
+      doc.line(20, pageHeight - 15, pageWidth - 20, pageHeight - 15);
+      
+      doc.setFontSize(7);
+      doc.setTextColor(150, 150, 150);
+      doc.text(
+        `Sistema de Agendamento de Ambientes Escolares`,
+        pageWidth / 2,
+        pageHeight - 10,
+        { align: 'center' }
+      );
+      doc.text(
+        `Página ${i} de ${pageCount}`,
+        pageWidth - 20,
+        pageHeight - 10,
+        { align: 'right' }
+      );
+      doc.text(
+        `Gerado em: ${new Date().toLocaleString('pt-BR')}`,
+        20,
+        pageHeight - 10,
+        { align: 'left' }
+      );
+    }
+    
+    doc.save(`relatorio_agendamentos_${new Date().toISOString().split('T')[0]}.pdf`);
+    this.presentToast('PDF exportado com sucesso!', 'success');
   }
 
   baixarArquivo(conteudo: string, nomeArquivo: string, tipo: string) {

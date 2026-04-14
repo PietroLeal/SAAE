@@ -17,91 +17,114 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
   margin-bottom: 1.5rem;
-}
 
-.stat-card {
-  background: white;
-  border-radius: 16px;
-  padding: 1rem;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  
-  ion-icon {
-    font-size: 1.8rem;
-    color: var(--ion-color-primary);
-    margin-bottom: 0.5rem;
-  }
-  
-  .stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #333;
-  }
-  
-  .stat-label {
-    font-size: 0.75rem;
-    color: #666;
-  }
-  
-  &.success ion-icon {
-    color: #28a745;
-  }
-  
-  &.danger ion-icon {
-    color: #dc3545;
+  .stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    ion-icon {
+      font-size: 2rem;
+      color: var(--ion-color-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--ion-color-primary);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 0.25rem;
+    }
+
+    &.success {
+      ion-icon, .stat-value {
+        color: var(--ion-color-success);
+      }
+    }
+
+    &.danger {
+      ion-icon, .stat-value {
+        color: var(--ion-color-danger);
+      }
+    }
   }
 }
 
 .filtros-section {
   background: white;
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 1rem;
   margin-bottom: 1.5rem;
-  
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
   h3 {
-    margin: 0 0 1rem;
+    margin: 0 0 1rem 0;
     font-size: 1.1rem;
     font-weight: 600;
-    color: #333;
+    color: var(--ion-color-primary);
+  }
+
+  .filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    .filtro-item {
+      --padding-start: 0;
+      --inner-padding-end: 0;
+    }
+  }
+
+  .filtros-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
   }
 }
 
-.filtros-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
+.export-buttons-section {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
-.filtro-item {
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  
-  ion-label {
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 4px;
+  h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ion-color-primary);
   }
-  
-  ion-input, ion-select {
-    --background: #f5f5f5;
-    --border-radius: 12px;
-    --padding-start: 12px;
-    --padding-end: 12px;
-    margin-top: 8px;
-    background: #f5f5f5;
-    border-radius: 12px;
-  }
-}
 
-.filtros-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  .export-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+
+    .export-btn {
+      --border-radius: 12px;
+      --padding-start: 1rem;
+      --padding-end: 1rem;
+      height: 48px;
+      font-weight: 600;
+      text-transform: none;
+      
+      ion-icon {
+        font-size: 1.2rem;
+      }
+    }
+  }
 }
 
 .reservas-list {
@@ -115,45 +138,43 @@
   border-radius: 16px;
   padding: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  
+
   .reserva-header {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #eee;
-    
+
     ion-icon {
       font-size: 1.2rem;
       color: var(--ion-color-primary);
     }
-    
+
     h3 {
-      flex: 1;
       margin: 0;
+      flex: 1;
       font-size: 1rem;
       font-weight: 600;
-      color: #333;
     }
   }
-  
+
   .reserva-detalhes {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-left: 1.5rem;
-    
+    flex-wrap: wrap;
+    gap: 0.75rem;
+
     .detalhe {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.25rem;
       font-size: 0.85rem;
-      color: #666;
-      
+      color: #555;
+
       ion-icon {
-        font-size: 0.9rem;
-        color: #999;
+        font-size: 1rem;
+        color: var(--ion-color-primary);
       }
     }
   }
@@ -162,24 +183,24 @@
 .empty-state {
   text-align: center;
   padding: 3rem;
-  color: #666;
-  
+  background: white;
+  border-radius: 16px;
+
   ion-icon {
     font-size: 3rem;
     color: #ccc;
     margin-bottom: 1rem;
   }
-  
+
   h3 {
+    margin: 0 0 0.5rem;
     font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #333;
   }
-  
+
   p {
     margin: 0;
-    color: #999;
+    color: #666;
   }
 }
 
@@ -188,15 +209,29 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 50vh;
+  padding: 3rem;
 
   ion-spinner {
     width: 48px;
     height: 48px;
   }
+
+  p {
+    margin-top: 1rem;
+    color: var(--ion-color-primary);
+  }
 }
 
-ion-content {
-  --background: #f5f5f5;
-  background: #f5f5f5;
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .filtros-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .export-buttons-grid {
+    grid-template-columns: 1fr;
+  }
 }
