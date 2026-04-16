@@ -8,8 +8,10 @@ export class RefreshService {
   private refreshSubject = new Subject<void>();
   refresh$ = this.refreshSubject.asObservable();
 
+  constructor() { }
+
   triggerRefresh() {
-    console.log('🔄 Refresh disparado');
+    console.log('Atualizando');
     this.refreshSubject.next();
   }
 }

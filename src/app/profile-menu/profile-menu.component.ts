@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { addIcons } from 'ionicons';
 import { personOutline, logOutOutline } from 'ionicons/icons';
 import { LogService } from '../services/log.service';
+import { RefreshService } from '../services/refresh.service';
 
 @Component({
   selector: 'app-profile-menu',
@@ -22,7 +23,8 @@ export class ProfileMenuComponent implements OnInit {
     private navCtrl: NavController,
     private popoverCtrl: PopoverController,
     private authService: AuthService,
-    private logService: LogService
+    private logService: LogService,
+    private refreshService: RefreshService
   ) {
     addIcons({
       personOutline,
@@ -48,6 +50,7 @@ export class ProfileMenuComponent implements OnInit {
     await this.logService.registrarLog('LOGOUT', {});
     await this.popoverCtrl.dismiss();
     await this.authService.logout();
+    this.refreshService.triggerRefresh();
     this.navCtrl.navigateRoot('/home');
   }
 
