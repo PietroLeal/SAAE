@@ -77,7 +77,7 @@ async function sendResetPasswordEmail(email, resetLink, userName) {
         Clique no link abaixo para criar uma nova senha:
         ${resetLink}
         
-        ⚠️ Este link é válido por apenas 1 hora e só pode ser usado uma vez.
+        Este link é válido por apenas 1 hora e só pode ser usado uma vez.
         
         Se você não solicitou essa redefinição, ignore este e-mail.
         
@@ -87,11 +87,11 @@ async function sendResetPasswordEmail(email, resetLink, userName) {
     };
 
     const info = await emailTransporter.sendMail(mailOptions);
-    console.log('✅ E-mail enviado com sucesso para:', email);
-    console.log('📧 ID da mensagem:', info.messageId);
+    console.log('E-mail enviado com sucesso para:', email);
+    console.log('ID da mensagem:', info.messageId);
     return true;
   } catch (error) {
-    console.error('❌ Erro ao enviar e-mail:', error);
+    console.error('Erro ao enviar e-mail:', error);
     return false;
   }
 }
@@ -141,7 +141,7 @@ async function initDatabase() {
       multipleStatements: true
     });
 
-    console.log('⚙️ Inicializando banco de dados...');
+    console.log('Inicializando banco de dados...');
 
     await connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
     await connection.query(`USE ${process.env.DB_NAME}`);
@@ -149,15 +149,15 @@ async function initDatabase() {
     const schemaPath = path.join(__dirname, 'schema.sql');
     if (fs.existsSync(schemaPath)) {
       const sql = fs.readFileSync(schemaPath, 'utf8');
-      console.log('📄 Executando schema.sql...');
+      console.log('Executando schema.sql...');
       await connection.query(sql);
-      console.log('✅ Schema.sql executado com sucesso!');
+      console.log('Schema.sql executado com sucesso!');
     } else {
-      console.log('⚠️ Arquivo schema.sql não encontrado!');
+      console.log('Arquivo SQL não encontrado!');
     }
     
   } catch (error) {
-    console.error('❌ Erro ao inicializar banco:', error);
+    console.error('Erro ao inicializar banco:', error);
   } finally {
     if (connection) await connection.end();
   }
@@ -180,7 +180,7 @@ async function ensureAdmin() {
     );
     
     if (tables.length === 0) {
-      console.log('⚠️ Tabela funcionarios não existe ainda, aguardando criação...');
+      console.log('Tabela funcionarios não existe ainda, aguardando criação...');
       return;
     }
 
@@ -190,7 +190,7 @@ async function ensureAdmin() {
     );
 
     if (rows.length === 0) {
-      console.log('⚠️ Admin não encontrado. Criando...');
+      console.log('Admin não encontrado. Criando...');
       
       const hash = process.env.ADMIN_PASSWORD_HASH || '$2a$10$e8idlDTcNYKwUgX2SURJ/OR3tDSgLNZcBOOF10P6uLMDILcXyPNfm';
       
@@ -206,9 +206,9 @@ async function ensureAdmin() {
         ]
       );
       
-      console.log('✅ Admin criado com sucesso!');
+      console.log('Admin criado com sucesso!');
     } else {
-      console.log('✅ Admin já existe no banco');
+      console.log('Admin já existe no banco');
     }
   } catch (error) {
     console.error('Erro ao verificar admin:', error);
@@ -231,7 +231,7 @@ const pool = mysql.createPool({
 async function testConnection() {
   try {
     const connection = await pool.getConnection();
-    console.log('✅ Conectado ao MariaDB com sucesso!');
+    console.log('✅ Backend inicializado com sucesso!');
     connection.release();
   } catch (error) {
     console.error('❌ Erro ao conectar:', error.message);
@@ -332,7 +332,7 @@ app.post('/api/auth/request-reset-password', async (req, res) => {
     const user = rows[0];
     
     const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = Date.now() + 3600000; // Expira em 1 hora
+    const expiresAt = Date.now() + 3600000;
     
     resetTokens.set(token, {
       email: user.email,
@@ -346,18 +346,18 @@ app.post('/api/auth/request-reset-password', async (req, res) => {
     const emailSent = await sendResetPasswordEmail(user.email, resetLink, user.nome);
     
     if (emailSent) {
-      console.log(`✅ Link de redefinição enviado para: ${user.email}`);
-      console.log(`🔗 Link: ${resetLink}`);
+      console.log(`Link de redefinição enviado para: ${user.email}`);
+      console.log(`Link: ${resetLink}`);
       res.json({ 
         message: 'Enviamos um link de redefinição para seu e-mail. Verifique sua caixa de entrada e spam.'
       });
     } else {
       console.log('\n========================================');
-      console.log('⚠️ FALHA NO ENVIO DE E-MAIL');
+      console.log(' FALHA NO ENVIO DE E-MAIL');
       console.log('========================================');
-      console.log(`📧 Para: ${user.email}`);
-      console.log(`👤 Usuário: ${user.nome}`);
-      console.log(`🔗 Link para redefinir (copie e cole no navegador):`);
+      console.log(`Para: ${user.email}`);
+      console.log(`Usuário: ${user.nome}`);
+      console.log(`Link para redefinir (copie e cole no navegador):`);
       console.log(`${resetLink}`);
       console.log('========================================\n');
       
@@ -418,7 +418,7 @@ app.post('/api/auth/confirm-reset-password', async (req, res) => {
     
     resetTokens.delete(token);
     
-    console.log(`✅ Senha redefinida com sucesso para usuário ID: ${tokenData.userId}`);
+    console.log(`Senha redefinida com sucesso para usuário ID: ${tokenData.userId}`);
     res.json({ message: 'Senha redefinida com sucesso' });
     
   } catch (error) {
@@ -483,20 +483,18 @@ app.get('/api/:table/query', async (req, res) => {
       if (['orderBy', 'order', 'limite', 'page'].includes(key)) continue;
       
       if (typeof value !== 'string') continue;
-      
-      // Operador: _gte (maior ou igual)
+  
       if (key.endsWith('_gte')) {
         const field = key.slice(0, -4);
         conditions.push(`${field} >= ?`);
         values.push(value);
       }
-      // Operador: _lte (menor ou igual)
       else if (key.endsWith('_lte')) {
         const field = key.slice(0, -4);
         conditions.push(`${field} <= ?`);
         values.push(value);
       }
-      // Operador: _in (lista de valores separados por vírgula)
+  
       else if (key.endsWith('_in') && value.includes(',')) {
         const field = key.slice(0, -3);
         const items = value.split(',');
@@ -504,19 +502,19 @@ app.get('/api/:table/query', async (req, res) => {
         conditions.push(`${field} IN (${placeholders})`);
         values.push(...items);
       }
-      // Operador: _ne (diferente)
+  
       else if (key.endsWith('_ne')) {
         const field = key.slice(0, -3);
         conditions.push(`${field} != ?`);
         values.push(value);
       }
-      // Operador: _like (busca parcial)
+
       else if (key.endsWith('_like')) {
         const field = key.slice(0, -5);
         conditions.push(`${field} LIKE ?`);
         values.push(`%${value}%`);
       }
-      // Operador padrão (igualdade)
+
       else {
         conditions.push(`${key} = ?`);
         values.push(value);
@@ -529,7 +527,6 @@ app.get('/api/:table/query', async (req, res) => {
       sql += ` WHERE ${conditions.join(' AND ')}`;
     }
 
-    // Ordenação
     if (req.query.orderBy) {
       const orderBy = req.query.orderBy;
       const order = req.query.order === 'DESC' ? 'DESC' : 'ASC';
@@ -538,7 +535,6 @@ app.get('/api/:table/query', async (req, res) => {
       sql += ` ORDER BY id DESC`;
     }
 
-    // Limite
     if (req.query.limite) {
       sql += ` LIMIT ${parseInt(req.query.limite)}`;
     }
@@ -744,8 +740,8 @@ app.post('/api/disponibilidades/todos-dias', authMiddleware, async (req, res) =>
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`\n🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`📊 Banco: ${process.env.DB_NAME}`);
-  console.log(`📧 E-mail configurado com: ${process.env.EMAIL_USER || 'não configurado'}`);
-  console.log(`🔗 API: http://localhost:${PORT}/api\n`);
+  console.log(`\nServidor rodando na porta ${PORT}`);
+  console.log(`Banco: ${process.env.DB_NAME}`);
+  console.log(`E-mail configurado com: ${process.env.EMAIL_USER || 'não configurado'}`);
+  console.log(`API: http://localhost:${PORT}/api\n`);
 });
