@@ -10,7 +10,6 @@
     </ion-button>
   </div>
 
-  <!-- Filtros -->
   <div class="filtros-section">
     <div class="filtros-grid">
       <ion-item class="filtro-item">
@@ -52,7 +51,6 @@
     </div>
   </div>
 
-  <!-- Lista de Reservas -->
   <div *ngIf="!loading">
     <div *ngIf="reservasFiltradas.length > 0" class="reservas-list">
       <div *ngFor="let reserva of reservasFiltradas" class="reserva-card">

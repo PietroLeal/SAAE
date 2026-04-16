@@ -38,8 +38,8 @@ import {
   HeadingLevel,
   ImageRun,
   VerticalAlign,
-  Header,   // <--- ADICIONADO
-  Footer    // <--- ADICIONADO
+  Header,  
+  Footer    
 } from 'docx';
 
 interface ReservaRelatorio {
@@ -561,14 +561,11 @@ exportarPDF() {
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   
-  // Função para adicionar texto com suporte a acentos
   const addText = (text: string, x: number, y: number, options?: any) => {
-    // Garantir que o texto seja string e remover caracteres problemáticos
     const cleanText = String(text || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     doc.text(cleanText, x, y, options);
   };
   
-  // Cabeçalho
   doc.setFillColor(0, 82, 212);
   doc.rect(0, 0, pageWidth, 12, 'F');
   
@@ -579,17 +576,14 @@ exportarPDF() {
   doc.setTextColor(255, 255, 255);
   addText("SISTEMA DE AGENDAMENTO DE AMBIENTES ESCOLARES", pageWidth / 2, 8, { align: 'center' });
   
-  // Título
   doc.setFontSize(16);
   doc.setTextColor(51, 51, 51);
   addText("RELATORIO DE AGENDAMENTOS", pageWidth / 2, 28, { align: 'center' });
   
-  // Linha decorativa
   doc.setDrawColor(0, 82, 212);
   doc.setLineWidth(0.5);
   doc.line(40, 33, pageWidth - 40, 33);
   
-  // Informações do relatório
   doc.setFontSize(9);
   doc.setTextColor(80, 80, 80);
   let yPos = 42;
@@ -603,7 +597,6 @@ exportarPDF() {
   addText(`Status: ${this.statusFiltro === 'todos' ? 'Todos' : this.getStatusLabel(this.statusFiltro)}`, 20, yPos);
   yPos += 15;
   
-  // Estatísticas
   const confirmadas = this.reservasFiltradas.filter(r => r.status === 'confirmada');
   const canceladas = this.reservasFiltradas.filter(r => r.status === 'cancelada');
   
@@ -617,10 +610,8 @@ exportarPDF() {
   addText(`Total: ${this.reservasFiltradas.length} | Confirmadas: ${confirmadas.length} | Canceladas: ${canceladas.length}`, 25, yPos + 15);
   yPos += 32;
   
-  // Tabela de dados
   const tableColumn = ["Sala", "Usuario", "Data", "Horario", "Status", "Motivo"];
   const tableRows = this.reservasFiltradas.map(r => {
-    // Formatar data corretamente
     let dataFormatada = '';
     if (r.data) {
       const dataStr = r.data.split('T')[0];
@@ -676,7 +667,6 @@ exportarPDF() {
     },
     margin: { left: 20, right: 20 },
     didDrawPage: (data) => {
-      // Rodapé em cada página
       const currentPage = data.pageNumber;
       const totalPages = doc.getNumberOfPages();
       

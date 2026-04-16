@@ -5,7 +5,6 @@
     <p>Preencha os dados para criar uma conta</p>
 
     <form novalidate [formGroup]="registerForm" (ngSubmit)="submitForm()">
-      <!-- Nome -->
       <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
         <ion-icon name="person-outline" slot="start"></ion-icon>
         <ion-input
@@ -18,8 +17,6 @@
       <ion-text color="danger" class="error-message" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
         <small>{{ getErrorMessage('name') }}</small>
       </ion-text>
-
-      <!-- E-mail -->
       <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
         <ion-icon name="mail-outline" slot="start"></ion-icon>
         <ion-input
@@ -32,8 +29,6 @@
       <ion-text color="danger" class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
         <small>{{ getErrorMessage('email') }}</small>
       </ion-text>
-
-      <!-- Telefone -->
       <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('telefone')?.invalid && registerForm.get('telefone')?.touched">
         <ion-icon name="call-outline" slot="start"></ion-icon>
         <ion-input
@@ -46,8 +41,6 @@
       <ion-text color="danger" class="error-message" *ngIf="registerForm.get('telefone')?.invalid && registerForm.get('telefone')?.touched">
         <small>{{ getErrorMessage('telefone') }}</small>
       </ion-text>
-
-      <!-- Tipo de Funcionário -->
       <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('tipo')?.invalid && registerForm.get('tipo')?.touched">
         <ion-icon name="briefcase-outline" slot="start"></ion-icon>
         <ion-select
@@ -62,8 +55,6 @@
       <ion-text color="danger" class="error-message" *ngIf="registerForm.get('tipo')?.invalid && registerForm.get('tipo')?.touched">
         <small>{{ getErrorMessage('tipo') }}</small>
       </ion-text>
-
-      <!-- Senha -->
       <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
         <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
         <ion-input
@@ -82,8 +73,6 @@
       <ion-text color="danger" class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
         <small>{{ getErrorMessage('password') }}</small>
       </ion-text>
-
-      <!-- Confirmar Senha -->
       <ion-item lines="none" class="input-item" [class.invalid]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
         <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
         <ion-input
@@ -96,8 +85,6 @@
       <ion-text color="danger" class="error-message" *ngIf="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched">
         <small>As senhas não conferem</small>
       </ion-text>
-
-      <!-- Botão Cadastrar -->
       <ion-button
         type="submit"
         expand="block"

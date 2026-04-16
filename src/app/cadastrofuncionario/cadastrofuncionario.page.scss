@@ -1,4 +1,3 @@
-/* Fundo com gradiente */
 .login-bg {
   --background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc);
   display: flex;
@@ -8,7 +7,6 @@
   padding: 2rem 1rem;
 }
 
-/* Container do formulário */
 .login-wrapper {
   background: #fff;
   width: 100%;
@@ -29,7 +27,6 @@
   }
 }
 
-/* Título */
 h2 {
   font-weight: 700;
   font-size: 2rem;
@@ -37,14 +34,12 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
-/* Texto abaixo do título */
 p {
   margin-bottom: 2rem;
   color: #666;
   font-size: 0.9rem;
 }
 
-/* Inputs estilizados */
 .input-item {
   margin-bottom: 0.5rem;
   --background: #eef3ff;
@@ -102,7 +97,6 @@ p {
   }
 }
 
-/* Mensagens de erro */
 .error-message {
   display: block;
   text-align: left;
@@ -111,7 +105,6 @@ p {
   font-size: 0.75rem;
 }
 
-/* Botão de cadastro */
 .btn-login {
   --background: #0052d4;
   --background-activated: #003a9f;
@@ -154,7 +147,6 @@ p {
   }
 }
 
-/* Ícone de mostrar/ocultar senha */
 .eye-icon {
   font-size: 1.3rem;
   color: #666;
@@ -168,7 +160,6 @@ p {
   }
 }
 
-/* Animação suave de entrada */
 @keyframes fadeInUp {
   from {
     opacity: 0;

@@ -7,7 +7,6 @@ export const loginGuard = async () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // Aguarda o loading terminar
   const loading = await firstValueFrom(authService.loading$);
   
   if (authService.isLoggedIn()) {

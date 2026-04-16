@@ -6,13 +6,11 @@
     <p class="subtitle">Gerencie suas reservas de salas</p>
   </div>
 
-  <!-- Loading -->
   <div *ngIf="loading" class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
     <p>Carregando seus agendamentos...</p>
   </div>
 
-  <!-- Lista de Reservas -->
   <div *ngIf="!loading">
     <div *ngIf="reservas.length > 0" class="reservas-list">
       <div *ngFor="let reserva of reservas" class="reserva-card">

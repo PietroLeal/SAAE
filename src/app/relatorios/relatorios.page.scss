@@ -15,6 +15,38 @@
   }
 }
 
+  .logo-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .title-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .notificacao-badge {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 10px;
+      padding: 4px 6px;
+      border-radius: 50%;
+    }
+
+    @media (max-width: 768px) {
+      .title-center {
+        display: none;
+      }
+    }
+  
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

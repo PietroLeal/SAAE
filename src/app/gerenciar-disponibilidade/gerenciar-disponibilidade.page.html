@@ -5,7 +5,6 @@
     <h2>Gerenciar Disponibilidade</h2>
   </div>
 
-  <!-- Seleção de Sala -->
   <ion-item class="sala-selector">
     <ion-label position="stacked">Selecione a Sala</ion-label>
     <ion-select [(ngModel)]="salaSelecionada" (ionChange)="onSalaSelecionada()" placeholder="Escolha uma sala">
@@ -16,13 +15,11 @@
     </ion-select>
   </ion-item>
 
-  <!-- Loading -->
   <div *ngIf="loading" class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
     <p>Carregando...</p>
   </div>
 
-  <!-- Lista de Disponibilidades -->
   <div *ngIf="!loading && salaSelecionada">
     <div class="header-disponibilidade">
       <h3>Horários Disponíveis</h3>
@@ -72,7 +69,6 @@
     <p>Selecione uma sala para gerenciar os horários de disponibilidade.</p>
   </div>
 
-  <!-- Modal de edição/criação -->
   <div class="modal-overlay" *ngIf="modalOpen" (click)="fecharModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <h3>

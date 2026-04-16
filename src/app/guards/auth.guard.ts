@@ -9,12 +9,9 @@ export const authGuard = async () => {
   const router = inject(Router);
   const toastCtrl = inject(ToastController);
 
-  // Aguarda o loading terminar
   const loading = await firstValueFrom(authService.loading$);
   if (loading) {
-    // Se ainda está carregando, espera
     await firstValueFrom(authService.loading$.pipe(
-      // Filtra até loading ser false
     ));
   }
 

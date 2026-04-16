@@ -7,7 +7,6 @@
   </div>
 
   <div class="form-card">
-    <!-- Seleção de Sala -->
     <div class="campo">
       <div class="campo-label">
         <ion-icon name="business-outline"></ion-icon>
@@ -19,8 +18,6 @@
         </ion-select-option>
       </ion-select>
     </div>
-
-    <!-- Calendário -->
     <div class="campo">
       <div class="campo-label">
         <ion-icon name="calendar-outline"></ion-icon>
@@ -36,7 +33,6 @@
       </ion-datetime>
     </div>
 
-    <!-- Blocos de Horários Disponíveis -->
     <div *ngIf="salaSelecionada && dataSelecionada" class="horarios-section">
       <div class="section-label">Blocos de Horários Disponíveis</div>
       
@@ -55,8 +51,6 @@
         <p>Nenhum bloco de horários disponível para esta data</p>
       </div>
     </div>
-
-    <!-- Motivo (opcional) -->
     <div class="campo" *ngIf="grupoSelecionado">
       <div class="campo-label">
         <ion-icon name="document-text-outline"></ion-icon>
@@ -69,8 +63,6 @@
         class="campo-textarea">
       </ion-textarea>
     </div>
-
-    <!-- Botão Confirmar -->
     <ion-button 
       *ngIf="grupoSelecionado"
       expand="block" 
@@ -81,8 +73,6 @@
       {{ salvando ? 'Processando...' : 'Confirmar Agendamento' }}
     </ion-button>
   </div>
-
-  <!-- Loading -->
   <div *ngIf="loading" class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
     <p>Carregando...</p>

@@ -1,13 +1,11 @@
 <app-header></app-header>
 
 <ion-content class="ion-padding" color="light">
-  <!-- Tela de loading -->
   <div *ngIf="!dadosCarregados" class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
     <p>Carregando...</p>
   </div>
 
-  <!-- Conteúdo principal -->
   <div *ngIf="dadosCarregados">
     <div class="welcome-section">
       <div class="greeting-card">
@@ -24,10 +22,8 @@
     </div>
 
 
-    <!-- TODOS OS CARDS EM UM ÚNICO GRID -->
     <ion-grid>
       <ion-row>
-        <!-- Cards Básicos (todos os usuários) -->
         <ion-col size="6">
           <ion-card class="dashboard-card" (click)="openScheduling()">
             <ion-icon name="calendar-outline" class="card-icon"></ion-icon>
@@ -42,7 +38,6 @@
             <ion-card-content>Cancelar agendamento</ion-card-content>
           </ion-card>
         </ion-col>
-        <!-- Minhas Reservas - Card para acessar todas as reservas -->
         <ion-col size="6">
           <ion-card class="dashboard-card" (click)="openMinhasReservas()">
             <ion-icon name="calendar-outline" class="card-icon"></ion-icon>
@@ -50,7 +45,6 @@
             <ion-card-content>Ver todos os meus agendamentos</ion-card-content>
           </ion-card>
         </ion-col>
-        <!-- Consulta Geral -->
         <ion-col size="6" *ngIf="permissoes?.verRelatorios">
           <ion-card class="dashboard-card" (click)="openConsultaGeral()">
             <ion-icon name="search-outline" class="card-icon"></ion-icon>
@@ -59,7 +53,6 @@
           </ion-card>
         </ion-col>
 
-        <!-- Relatórios -->
         <ion-col size="6" *ngIf="permissoes?.verRelatorios">
           <ion-card class="dashboard-card" (click)="viewReports()">
             <ion-icon name="bar-chart-outline" class="card-icon"></ion-icon>
@@ -68,7 +61,6 @@
           </ion-card>
         </ion-col>
 
-        <!-- Gerenciar Salas -->
         <ion-col size="6" *ngIf="permissoes?.gerenciarSalas">
           <ion-card class="dashboard-card" (click)="openGerenciarSalas()">
             <ion-icon name="build-outline" class="card-icon"></ion-icon>
@@ -77,7 +69,6 @@
           </ion-card>
         </ion-col>
 
-        <!-- Gerenciar Disponibilidade -->
         <ion-col size="6" *ngIf="permissoes?.gerenciarDisponibilidade">
           <ion-card class="dashboard-card" (click)="openGerenciarDisponibilidade()">
             <ion-icon name="calendar-clear-outline" class="card-icon"></ion-icon>
@@ -86,7 +77,6 @@
           </ion-card>
         </ion-col>
 
-        <!-- Usuários -->
         <ion-col size="6" *ngIf="permissoes?.verUsuarios">
           <ion-card class="dashboard-card" (click)="manageUsers()">
             <ion-icon name="people-outline" class="card-icon"></ion-icon>
@@ -95,7 +85,6 @@
           </ion-card>
         </ion-col>
 
-        <!-- Gestão de Professores (mesmo que Usuários) -->
         <ion-col size="6" *ngIf="permissoes?.gerenciarUsuarios">
           <ion-card class="dashboard-card" (click)="openGestaoProfessores()">
             <ion-icon name="people-circle-outline" class="card-icon"></ion-icon>
@@ -104,7 +93,6 @@
           </ion-card>
         </ion-col>
 
-        <!-- Visualização Detalhada -->
         <ion-col size="6" *ngIf="permissoes?.verRelatorios">
           <ion-card class="dashboard-card" (click)="openDetalhesAgendamentos()">
             <ion-icon name="document-text-outline" class="card-icon"></ion-icon>
@@ -113,7 +101,6 @@
           </ion-card>
         </ion-col>
 
-        <!-- Ver Logs -->
         <ion-col size="6" *ngIf="permissoes?.verLogs">
           <ion-card class="dashboard-card" (click)="viewLogs()">
             <ion-icon name="folder-open-outline" class="card-icon"></ion-icon>
@@ -122,7 +109,6 @@
           </ion-card>
         </ion-col>
 
-        <!-- Recursos -->
         <ion-col size="6" *ngIf="permissoes?.gerenciarRecursos">
           <ion-card class="dashboard-card" (click)="openRecursos()">
             <ion-icon name="cube-outline" class="card-icon"></ion-icon>
@@ -131,7 +117,6 @@
           </ion-card>
         </ion-col>
 
-        <!-- Perfis -->
         <ion-col size="6" *ngIf="permissoes?.gerenciarPerfis">
           <ion-card class="dashboard-card" (click)="openPerfis()">
             <ion-icon name="people-circle-outline" class="card-icon"></ion-icon>

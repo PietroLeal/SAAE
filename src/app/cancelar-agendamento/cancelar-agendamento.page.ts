@@ -130,10 +130,8 @@ export class CancelarAgendamentoPage implements OnInit {
         horario: reserva.horario
       });
       
-      // Remove da lista imediatamente
       this.reservas = this.reservas.filter(r => r.id !== reserva.id);
       
-      // Força atualização do dashboard
       this.refreshService.triggerRefresh();
       
       this.presentToast('Agendamento cancelado com sucesso!', 'success');

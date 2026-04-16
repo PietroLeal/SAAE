@@ -9,13 +9,11 @@
     </ion-button>
   </div>
 
-  <!-- Loading -->
   <div *ngIf="loading" class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
     <p>Carregando salas...</p>
   </div>
 
-  <!-- Lista de salas -->
   <ion-list *ngIf="!loading">
     <ion-item *ngFor="let sala of salas" class="sala-item" button>
       <ion-icon [name]="getIconePorTipo(sala.tipoAmbiente)" slot="start" class="sala-icon"></ion-icon>
@@ -45,7 +43,6 @@
     </ion-item>
   </ion-list>
 
-  <!-- Modal de edição/criação -->
   <div class="modal-overlay" *ngIf="modalOpen" (click)="fecharModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <h3>{{ editando ? 'Editar Sala' : 'Nova Sala' }}</h3>

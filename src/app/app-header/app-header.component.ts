@@ -22,7 +22,7 @@ import { notificationsOutline, personCircleOutline } from 'ionicons/icons';
         <ion-buttons slot="end">
           <ion-button (click)="abrirNotificacoes()">
             <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
-            <ion-badge *ngIf="notificacoesNaoLidas > 0" color="danger" class="notificacao-badge">
+            <ion-badge *ngIf="notificacoesNaoLidas > 0" color="danger" class ="notificacao-badge">
               {{ notificacoesNaoLidas > 99 ? '99+' : notificacoesNaoLidas }}
             </ion-badge>
           </ion-button>
