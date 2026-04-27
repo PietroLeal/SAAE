@@ -63,11 +63,8 @@ export class PermissaoService {
     }
   }
 
-  async refreshPermissoes(): Promise<Permissoes | null> {
-    console.log('🔄 Forçando refresh das permissões');
-    this.permissoesCache.clear();
-    return this.getPermissoesDoUsuario(true);
-  }
+  // ⭐ NÃO ADICIONE O MÉTODO refreshPermissoes AQUI!
+  // O método getPermissoesDoUsuario com forcarRefresh=true já faz o que você precisa
 
   getPermissoesPadrao(tipo: string): Permissoes {
     const padrao: Record<string, Permissoes> = {

@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-const hashNoBanco = '$2a$10$xFeDe/C9qJWYOo5D7h7bb.htK1ChaG1tZ5329Jm/0jkwe5.8y4LIG ';
+const hashNoBanco = '$2a$10$vSeGVAeARTPnXFmhA47dN.FEqG3na2vU2tguND5zyFNnqFAiiv/pm';
 const senhaDigitada = 'admin123';
 
 const isValid = bcrypt.compareSync(senhaDigitada, hashNoBanco);

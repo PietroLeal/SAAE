@@ -91,27 +91,50 @@ export class DashboardPage implements OnInit {
   }
   
   async ngOnInit() {
+    // Subscribe no refresh service
     this.refreshService.refresh$.subscribe(async () => {
-      console.log('🔄 Recarregando permissões no dashboard...');
-      this.permissoes = await this.permissaoService.refreshPermissoes();
-      this.cdr.detectChanges();
+      console.log('🔄 Refresh triggered, recarregando dashboard...');
+      await this.recarregarTudo();
     });
     
-    this.permissoes = await this.permissaoService.getPermissoesDoUsuario();
-    await this.carregarDados();
-    await this.carregarReservas();
-    this.definirMensagemDoDia();
-    this.dadosCarregados = true;
-    this.cdr.detectChanges();
+    // Carregamento inicial
+    await this.recarregarTudo();
   }
 
+  // ⭐ MÉTODO PRINCIPAL - Recarrega todos os dados quando a tela for exibida
+  async ionViewWillEnter() {
+    console.log('🔄 Dashboard será exibido, recarregando todos os dados...');
+    await this.recarregarTudo();
+  }
+
+  // ⭐ NOVO MÉTODO - Centraliza toda a recarga de dados
+  async recarregarTudo() {
+    console.log('🔄 Recarregando todos os dados do dashboard...');
+    
+    // 1. Recarregar permissões do usuário atual (forçando refresh)
+    this.permissoes = await this.permissaoService.getPermissoesDoUsuario(true);
+    console.log('✅ Permissões atualizadas:', this.permissoes);
+    
+    // 2. Recarregar dados do usuário
+    await this.carregarDados();
+    
+    // 3. Recarregar reservas
+    await this.carregarReservas();
+    
+    // 4. Atualizar mensagem do dia
+    this.definirMensagemDoDia();
+    
+    // 5. Garantir que os dados estão carregados
+    this.dadosCarregados = true;
+    
+    // 6. Forçar atualização da tela
+    this.cdr.detectChanges();
+    
+    console.log('✅ Dashboard completamente atualizado para o usuário:', this.userName, 'Perfil:', this.userRole);
+  }
 
   openMinhasReservas() {
-  this.navCtrl.navigateForward('/minhas-reservas');
-
-  }
-  ionViewWillEnter() {
-    this.carregarReservas();
+    this.navCtrl.navigateForward('/minhas-reservas');
   }
 
   definirMensagemDoDia() {
@@ -164,18 +187,23 @@ export class DashboardPage implements OnInit {
   }
 
   async carregarDados() {
-    const user = this.authService.getCurrentUser();
+    const user = await this.authService.getCurrentUser();
     if (user) {
       this.userEmail = user.email || '';
       this.userName = user.nome || user.email?.split('@')[0] || 'Usuário';
       this.userRole = user.tipo || '';
-      this.cdr.detectChanges();
+      console.log('✅ Dados do usuário atualizados:', { nome: this.userName, email: this.userEmail, role: this.userRole });
+    } else {
+      console.warn('⚠️ Nenhum usuário encontrado no carregarDados()');
     }
   }
 
   async carregarReservas() {
-    const user = this.authService.getCurrentUser();
-    if (!user) return;
+    const user = await this.authService.getCurrentUser();
+    if (!user) {
+      console.warn('⚠️ Nenhum usuário encontrado para carregar reservas');
+      return;
+    }
 
     try {
       const reservas = await this.api.getWithQuery('reservas', { usuarioId: user.id });
@@ -195,6 +223,7 @@ export class DashboardPage implements OnInit {
         return a.horario - b.horario;
       });
       
+      console.log(`✅ ${this.recentBookings.length} reservas carregadas para o usuário ${user.id}`);
       this.cdr.detectChanges();
     } catch (error) {
       console.error('Erro ao carregar reservas:', error);
