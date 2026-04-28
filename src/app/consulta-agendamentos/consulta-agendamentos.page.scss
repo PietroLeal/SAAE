@@ -14,7 +14,7 @@
 
   .subtitle {
     margin: 0.5rem 0 0;
-    color: #666;
+    color: var(--ion-color-medium);
     font-size: 0.9rem;
   }
 
@@ -24,10 +24,15 @@
 }
 
 .filtros-section {
-  background: white;
+  background: var(--ion-color-light);
   border-radius: 20px;
   padding: 1rem;
   margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode .filtros-section {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .filtros-grid {
@@ -43,18 +48,27 @@
   
   ion-label {
     font-weight: 500;
-    color: #333;
+    color: var(--ion-text-color);
     margin-bottom: 4px;
   }
   
   ion-input, ion-select {
-    --background: #f5f5f5;
+    --background: var(--ion-color-light-shade);
     --border-radius: 12px;
     --padding-start: 12px;
     --padding-end: 12px;
+    --color: var(--ion-text-color);
     margin-top: 8px;
-    background: #f5f5f5;
+    background: var(--ion-color-light-shade);
     border-radius: 12px;
+  }
+  
+  ion-select::part(placeholder) {
+    color: var(--ion-color-medium);
+  }
+  
+  ion-select::part(text) {
+    color: var(--ion-text-color);
   }
 }
 
@@ -62,6 +76,10 @@
   display: flex;
   justify-content: flex-end;
   margin-top: 0.5rem;
+  
+  ion-button {
+    --color: var(--ion-color-primary);
+  }
 }
 
 .reservas-list {
@@ -71,7 +89,7 @@
 }
 
 .reserva-card {
-  background: white;
+  background: var(--ion-color-light);
   border-radius: 16px;
   padding: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -88,7 +106,7 @@
     gap: 0.75rem;
     margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--ion-color-light-shade);
     
     ion-icon {
       font-size: 1.2rem;
@@ -100,7 +118,7 @@
       margin: 0;
       font-size: 1rem;
       font-weight: 600;
-      color: #333;
+      color: var(--ion-text-color);
     }
   }
   
@@ -115,24 +133,36 @@
       align-items: center;
       gap: 0.75rem;
       font-size: 0.85rem;
-      color: #666;
+      color: var(--ion-color-medium);
       
       ion-icon {
         font-size: 0.9rem;
-        color: #999;
+        color: var(--ion-color-medium);
+      }
+      
+      span {
+        color: var(--ion-color-medium);
       }
     }
+  }
+}
+
+body.dark-mode .reserva-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
 }
 
 .empty-state {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: var(--ion-color-medium);
 
   ion-icon {
     font-size: 3rem;
-    color: #ccc;
+    color: var(--ion-color-medium-tint);
     margin-bottom: 1rem;
   }
 
@@ -140,12 +170,12 @@
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #333;
+    color: var(--ion-text-color);
   }
 
   p {
     margin: 0;
-    color: #999;
+    color: var(--ion-color-medium);
   }
 }
 
@@ -160,9 +190,13 @@
     width: 48px;
     height: 48px;
   }
+  
+  p {
+    color: var(--ion-color-medium);
+  }
 }
 
 ion-content {
-  --background: #f5f5f5;
-  background: #f5f5f5;
+  --background: var(--ion-color-light);
+  background: var(--ion-color-light);
 }

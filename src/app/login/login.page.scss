@@ -2,6 +2,10 @@
   --background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc);
 }
 
+body.dark-mode .login-bg {
+  --background: linear-gradient(135deg, #002d6b, #003a8a, #004ea3);
+}
+
 .login-container {
   display: flex;
   align-items: center;
@@ -12,7 +16,7 @@
 }
 
 .login-wrapper {
-  background: #fff;
+  background: var(--ion-color-light);
   width: 100%;
   max-width: 400px;
   padding: 2.5rem 2rem;
@@ -26,22 +30,26 @@
   }
 }
 
+body.dark-mode .login-wrapper {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
 h2 {
   font-weight: 700;
   font-size: 2rem;
-  color: #0052d4;
+  color: var(--ion-color-primary);
   margin-bottom: 0.5rem;
 }
 
 p {
   margin-bottom: 2rem;
-  color: #666;
+  color: var(--ion-color-medium);
   font-size: 0.9rem;
 }
 
 .input-item {
   margin-bottom: 1.5rem;
-  --background: #eef3ff;
+  --background: var(--ion-color-light-shade);
   --border-radius: 50px !important;
   --inner-padding-end: 0px;
   --padding-start: 0px;
@@ -55,8 +63,8 @@ p {
 
   ion-icon:first-child {
     font-size: 1.6rem;
-    color: #0052d4;
-    background-color: #d0e2ff;
+    color: var(--ion-color-primary);
+    background-color: rgba(var(--ion-color-primary-rgb), 0.15);
     border-radius: 50%;
     padding: 0.4rem;
     margin-left: 0.75rem;
@@ -69,17 +77,24 @@ p {
     --padding-top: 16px;
     --padding-bottom: 16px;
     font-size: 1rem;
-    color: #333;
+    color: var(--ion-text-color);
     font-weight: 500;
     height: 100%;
+    --placeholder-color: var(--ion-color-medium);
+  }
+}
+
+body.dark-mode .input-item {
+  ion-icon:first-child {
+    background-color: rgba(var(--ion-color-primary-rgb), 0.25);
   }
 }
 
 .btn-login {
-  --background: #0052d4;
-  --background-activated: #003a9f;
-  --background-focused: #003a9f;
-  --box-shadow: 0 5px 15px rgba(0, 82, 212, 0.5);
+  --background: var(--ion-color-primary);
+  --background-activated: var(--ion-color-primary-shade);
+  --background-focused: var(--ion-color-primary-shade);
+  --box-shadow: 0 5px 15px rgba(var(--ion-color-primary-rgb), 0.5);
   --border-radius: 50px !important;
   border-radius: 50px !important;
   font-weight: 700;
@@ -108,8 +123,8 @@ p {
 }
 
 .forgot-btn {
-  --color: #0052d4;
-  --color-activated: #003a9f;
+  --color: var(--ion-color-primary);
+  --color-activated: var(--ion-color-primary-shade);
   font-size: 0.9rem;
   font-weight: 500;
   text-transform: none;
@@ -118,8 +133,21 @@ p {
 
 .eye-icon {
   font-size: 1.3rem;
-  color: #666;
+  color: var(--ion-color-medium);
   cursor: pointer;
   padding: 0.3rem;
   margin-right: 0.75rem;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--ion-color-primary);
+  }
+}
+
+body.dark-mode .eye-icon {
+  color: var(--ion-color-medium);
+  
+  &:hover {
+    color: var(--ion-color-primary);
+  }
 }

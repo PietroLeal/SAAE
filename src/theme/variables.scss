@@ -1,6 +1,3 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
-
 :root {
   --ion-background-color: #ffffff;
   --ion-background-color-rgb: 255, 255, 255;
@@ -72,3 +69,167 @@
   --ion-color-light-tint: #f7f9fd;
 }
 
+body.dark-mode {
+  --ion-background-color: #121212;
+  --ion-background-color-rgb: 18, 18, 18;
+  
+  --ion-text-color: #ffffff;
+  --ion-text-color-rgb: 255, 255, 255;
+  
+  --ion-color-primary: #3a7bd5;
+  --ion-color-primary-rgb: 58,123,213;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255,255,255;
+  --ion-color-primary-shade: #336dbb;
+  --ion-color-primary-tint: #4e88d9;
+
+  --ion-color-secondary: #2d8fd9;
+  --ion-color-secondary-rgb: 45,143,217;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255,255,255;
+  --ion-color-secondary-shade: #287ebf;
+  --ion-color-secondary-tint: #429add;
+
+  --ion-color-tertiary: #7a5cff;
+  --ion-color-tertiary-rgb: 122,92,255;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255,255,255;
+  --ion-color-tertiary-shade: #6b51e0;
+  --ion-color-tertiary-tint: #8775ff;
+
+  --ion-color-success: #2dd55b;
+  --ion-color-success-rgb: 45,213,91;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0,0,0;
+  --ion-color-success-shade: #28bb50;
+  --ion-color-success-tint: #42da6c;
+
+  --ion-color-warning: #ffc409;
+  --ion-color-warning-rgb: 255,196,9;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0,0,0;
+  --ion-color-warning-shade: #e0ac08;
+  --ion-color-warning-tint: #ffca22;
+
+  --ion-color-danger: #ff4d4d;
+  --ion-color-danger-rgb: 255,77,77;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255,255,255;
+  --ion-color-danger-shade: #e04444;
+  --ion-color-danger-tint: #ff6666;
+
+  --ion-color-dark: #e0e0e0;
+  --ion-color-dark-rgb: 224,224,224;
+  --ion-color-dark-contrast: #000000;
+  --ion-color-dark-contrast-rgb: 0,0,0;
+  --ion-color-dark-shade: #c5c5c5;
+  --ion-color-dark-tint: #e3e3e3;
+
+  --ion-color-medium: #a0a0a0;
+  --ion-color-medium-rgb: 160,160,160;
+  --ion-color-medium-contrast: #000000;
+  --ion-color-medium-contrast-rgb: 0,0,0;
+  --ion-color-medium-shade: #8d8d8d;
+  --ion-color-medium-tint: #aaaaaa;
+
+  --ion-color-light: #1e1e1e;
+  --ion-color-light-rgb: 30,30,30;
+  --ion-color-light-contrast: #ffffff;
+  --ion-color-light-contrast-rgb: 255,255,255;
+  --ion-color-light-shade: #2a2a2a;
+  --ion-color-light-tint: #353535;
+}
+
+body.dark-mode .alert-wrapper {
+  background: var(--ion-color-light);
+  color: var(--ion-text-color);
+}
+
+body.dark-mode .alert-head {
+  background: var(--ion-color-light);
+  border-bottom-color: var(--ion-color-light-shade);
+}
+
+body.dark-mode .alert-title {
+  color: var(--ion-text-color);
+}
+
+body.dark-mode .alert-message {
+  color: var(--ion-color-medium);
+}
+
+body.dark-mode .alert-radio-label {
+  color: var(--ion-text-color);
+}
+
+body.dark-mode .alert-radio-icon {
+  border-color: var(--ion-color-medium);
+}
+
+body.dark-mode .alert-button-inner {
+  color: var(--ion-color-primary);
+}
+
+body.dark-mode .alert-radio-group {
+  border-top-color: var(--ion-color-light-shade);
+}
+
+body.dark-mode .select-interface-option {
+  color: var(--ion-text-color);
+  background: var(--ion-color-light);
+}
+
+body.dark-mode .action-sheet-group {
+  background: var(--ion-color-light);
+}
+
+body.dark-mode .action-sheet-title {
+  color: var(--ion-text-color);
+}
+
+body.dark-mode .action-sheet-button-inner {
+  color: var(--ion-text-color);
+}
+
+body.dark-mode .picker-toolbar {
+  background: var(--ion-color-light);
+}
+
+body.dark-mode .picker-button {
+  color: var(--ion-color-primary);
+}
+
+body.dark-mode .picker-columns {
+  background: var(--ion-color-light);
+}
+
+body.dark-mode .picker-opt {
+  color: var(--ion-text-color);
+}
+
+body.dark-mode ion-select {
+  --placeholder-color: var(--ion-color-medium);
+  --color: var(--ion-text-color);
+}
+
+body.dark-mode ion-select-popover {
+  --background: var(--ion-color-light);
+}
+
+body.dark-mode ion-radio {
+  --color: var(--ion-color-medium);
+  --color-checked: var(--ion-color-primary);
+}
+
+body.dark-mode ion-radio-group {
+  color: var(--ion-text-color);
+}
+
+ion-alert {
+  --background: var(--ion-color-light);
+  --backdrop-opacity: 0.7;
+}
+
+body.dark-mode ion-alert {
+  --background: var(--ion-color-light);
+}

@@ -1,41 +1,14 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
-
-/* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
-
-/* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
-// Estilos customizados para toasts
 ion-toast {
   --border-radius: 12px;
   --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -67,81 +40,10 @@ ion-toast.toast-warning {
 }
 
 ion-toast.toast-primary {
-  --background: #0052d4;
+  --background: #0054e9;
   --color: white;
 }
-:root {
-  --ion-background-color: #ffffff;
-  --ion-background-color-rgb: 255, 255, 255;
-  --ion-text-color: #000000;
-  --ion-text-color-rgb: 0, 0, 0;
-  --ion-card-background: #ffffff;
-  --ion-item-background: #ffffff;
-  --ion-toolbar-background: #0052d4;
-  --ion-toolbar-color: #ffffff;
-}
 
-/* Força o tema claro em todos os elementos */
-body,
-ion-app,
-ion-content,
-ion-item,
-ion-card,
-ion-list,
-ion-list-header {
-  --background: #ffffff;
-  background: #ffffff;
-  color: #000000;
-}
-
-/* Botões */
-ion-button {
-  --background: #0052d4;
-  --background-activated: #003a9f;
-  --background-focused: #003a9f;
-  --color: #ffffff;
-}
-
-/* Botão outline */
-ion-button[fill="outline"] {
-  --background: transparent;
-  --color: #0052d4;
-}
-
-/* Botão claro */
-ion-button[color="light"] {
-  --background: #f6f8fc;
-  --color: #000000;
-}
-
-/* Inputs */
-ion-input,
-ion-select,
-ion-textarea {
-  --background: #f6f8fc;
-  --color: #000000;
-}
-
-/* Cards */
-ion-card {
-  --background: #ffffff;
-  background: #ffffff;
-  color: #000000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Header */
-ion-header {
-  --background: #0052d4;
-  background: #0052d4;
-}
-
-ion-toolbar {
-  --background: #0052d4;
-  background: #0052d4;
-  --color: #ffffff;
-  color: #ffffff;
-}
 .profile-popover {
   --width: 280px;
   --border-radius: 16px;
@@ -161,4 +63,177 @@ ion-content {
   border-radius: 16px;
   overflow: hidden;
   padding: 0;
+}
+
+ion-radio {
+  --color: var(--ion-color-medium);
+  --color-checked: var(--ion-color-primary);
+}
+
+ion-radio-group {
+  color: var(--ion-text-color);
+}
+
+ion-select {
+  --placeholder-color: var(--ion-color-medium);
+  --color: var(--ion-text-color);
+}
+
+ion-select-popover {
+  --background: var(--ion-color-light);
+}
+
+ion-select-popover ion-radio {
+  --color: var(--ion-color-medium);
+  --color-checked: var(--ion-color-primary);
+}
+
+ion-select-popover ion-item {
+  --background: var(--ion-color-light);
+  --color: var(--ion-text-color);
+}
+
+ion-alert {
+  --background: var(--ion-color-light);
+  --backdrop-opacity: 0.7;
+}
+
+ion-alert .alert-wrapper {
+  background: var(--ion-color-light);
+  border-radius: 16px;
+}
+
+ion-alert .alert-head {
+  background: var(--ion-color-light);
+  border-bottom: 1px solid var(--ion-color-light-shade);
+}
+
+ion-alert .alert-title {
+  color: var(--ion-text-color);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+ion-alert .alert-message {
+  color: var(--ion-color-medium);
+}
+
+ion-alert .alert-radio-label {
+  color: var(--ion-text-color);
+  font-weight: normal;
+}
+
+ion-alert .alert-radio-icon {
+  border-color: var(--ion-color-medium);
+  background-color: transparent;
+}
+
+ion-alert .alert-radio-inner {
+  background-color: var(--ion-color-primary);
+}
+
+ion-alert .alert-button-inner {
+  color: var(--ion-color-primary);
+  font-weight: 600;
+}
+
+ion-alert .alert-radio-group {
+  border-top-color: var(--ion-color-light-shade);
+}
+
+ion-alert .alert-checkbox-label {
+  color: var(--ion-text-color);
+}
+
+ion-alert .alert-checkbox-icon {
+  border-color: var(--ion-color-medium);
+  background-color: transparent;
+}
+
+ion-alert .alert-checkbox-inner {
+  background-color: var(--ion-color-primary);
+}
+
+ion-alert .alert-radio-button[aria-checked=true] .alert-radio-label {
+  color: var(--ion-color-primary);
+  font-weight: 600;
+}
+
+ion-alert .alert-radio-button[aria-checked=false] .alert-radio-label {
+  color: var(--ion-text-color);
+  font-weight: normal;
+}
+
+.action-sheet-group {
+  background: var(--ion-color-light);
+}
+
+.action-sheet-title {
+  color: var(--ion-text-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.action-sheet-button-inner {
+  color: var(--ion-text-color);
+}
+
+.action-sheet-cancel {
+  background: var(--ion-color-light);
+}
+
+.picker-toolbar {
+  background: var(--ion-color-light);
+}
+
+.picker-button {
+  color: var(--ion-color-primary);
+}
+
+.picker-columns {
+  background: var(--ion-color-light);
+}
+
+.picker-opt {
+  color: var(--ion-text-color);
+}
+
+body.dark-mode {
+  ion-alert .alert-wrapper {
+    background: var(--ion-color-light);
+  }
+  
+  ion-alert .alert-head {
+    background: var(--ion-color-light);
+  }
+  
+  .action-sheet-group {
+    background: var(--ion-color-light);
+  }
+  
+  .picker-columns {
+    background: var(--ion-color-light);
+  }
+  
+  ion-alert .alert-radio-button[aria-checked=true] .alert-radio-label {
+    color: var(--ion-color-primary);
+    font-weight: 600;
+  }
+  
+  ion-alert .alert-radio-button[aria-checked=false] .alert-radio-label {
+    color: var(--ion-text-color);
+    font-weight: normal;
+  }
+  
+  ion-alert .alert-radio-icon {
+    border-color: var(--ion-color-medium);
+  }
+}
+
+ion-radio.ion-radio-checked {
+  --color-checked: var(--ion-color-primary);
+}
+
+ion-radio:not(.ion-radio-checked) {
+  --color: var(--ion-color-medium);
 }

@@ -18,5 +18,10 @@ export class AppComponent implements OnInit {
         console.log('❌ Ninguém logado');
       }
     });
+
+    const darkModeEnabled = localStorage.getItem('dark-mode') === 'enabled';
+    if (darkModeEnabled) {
+      document.body.classList.add('dark-mode');
+    }
   }
 }

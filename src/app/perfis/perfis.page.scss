@@ -23,7 +23,6 @@
   flex-direction: column;
   gap: 1.5rem;
 }
-// Adicione ao final do arquivo
 
 .forgot-password-link {
   text-align: center;
@@ -32,18 +31,23 @@
 }
 
 .forgot-btn {
-  --color: #0052d4;
-  --color-activated: #003a9f;
+  --color: var(--ion-color-primary);
+  --color-activated: var(--ion-color-primary-shade);
   font-size: 0.9rem;
   font-weight: 500;
   text-transform: none;
   letter-spacing: 0;
 }
+
 .perfil-card {
-  background: white;
+  background: var(--ion-color-light);
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode .perfil-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .perfil-header {
@@ -51,7 +55,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, #0052d4, #4364f7);
+  background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-secondary));
   color: white;
 
   .perfil-title {
@@ -89,7 +93,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--ion-color-light-shade);
 
   &:last-child {
     border-bottom: none;
@@ -105,12 +109,12 @@
   .permissao-nome {
     font-size: 0.9rem;
     font-weight: 500;
-    color: #333;
+    color: var(--ion-text-color);
   }
 
   .permissao-descricao {
     font-size: 0.7rem;
-    color: #999;
+    color: var(--ion-color-medium);
   }
 }
 
@@ -123,7 +127,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--ion-color-light-shade);
 
   ion-button {
     --border-radius: 50px;
@@ -143,9 +147,13 @@
     width: 48px;
     height: 48px;
   }
+  
+  p {
+    color: var(--ion-color-medium);
+  }
 }
 
 ion-content {
-  --background: #f5f5f5;
-  background: #f5f5f5;
+  --background: var(--ion-color-light);
+  background: var(--ion-color-light);
 }

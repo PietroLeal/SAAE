@@ -1,5 +1,6 @@
 ion-content {
-  --background: #f8f9ff;
+  --background: var(--ion-color-light);
+  background: var(--ion-color-light);
 }
 
 .header-section {
@@ -20,7 +21,7 @@ ion-content {
     
     p {
       margin: 0;
-      color: #666;
+      color: var(--ion-color-medium);
       font-size: 0.9rem;
     }
   }
@@ -33,7 +34,7 @@ ion-content {
 }
 
 .filtros-section {
-  background: white;
+  background: var(--ion-color-light);
   border-radius: 20px;
   padding: 1rem;
   margin-bottom: 1.5rem;
@@ -45,7 +46,7 @@ ion-content {
     gap: 0.5rem;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--ion-color-light-shade);
     
     ion-icon {
       font-size: 1.2rem;
@@ -54,7 +55,7 @@ ion-content {
     
     span {
       font-weight: 500;
-      color: #333;
+      color: var(--ion-text-color);
       flex: 1;
     }
   }
@@ -69,20 +70,25 @@ ion-content {
       min-width: 150px;
       
       .filtro-select {
-        --background: #f5f5f5;
+        --background: var(--ion-color-light-shade);
         --border-radius: 12px;
         --padding-start: 12px;
+        --color: var(--ion-text-color);
       }
       
       .filtro-data {
-        --background: #f5f5f5;
+        --background: var(--ion-color-light-shade);
         --border-radius: 12px;
         --padding-start: 12px;
         --padding-end: 12px;
-        --color: #333;
+        --color: var(--ion-text-color);
       }
     }
   }
+}
+
+body.dark-mode .filtros-section {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .select-option {
@@ -115,19 +121,19 @@ ion-content {
   
   ion-icon {
     font-size: 4rem;
-    color: #ccc;
+    color: var(--ion-color-medium-tint);
     margin-bottom: 1rem;
   }
   
   h3 {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #333;
+    color: var(--ion-text-color);
     margin-bottom: 0.5rem;
   }
   
   p {
-    color: #666;
+    color: var(--ion-color-medium);
     margin-bottom: 1.5rem;
   }
 }
@@ -143,10 +149,11 @@ ion-content {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   margin: 0;
   transition: all 0.2s ease;
+  background: var(--ion-color-light);
   
   &.cancelada {
     opacity: 0.7;
-    background: #fafafa;
+    background: var(--ion-color-light-shade);
   }
   
   .card-header {
@@ -169,6 +176,7 @@ ion-content {
         font-size: 1.1rem;
         font-weight: 600;
         margin: 0;
+        color: var(--ion-text-color);
       }
     }
     
@@ -193,7 +201,7 @@ ion-content {
       display: flex;
       align-items: center;
       gap: 6px;
-      color: #555;
+      color: var(--ion-color-medium);
       font-size: 0.85rem;
       
       ion-icon {
@@ -220,7 +228,7 @@ ion-content {
     gap: 0.5rem;
     margin-top: 0.5rem;
     padding-top: 0.5rem;
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--ion-color-light-shade);
     
     .btn-detalhes {
       --color: var(--ion-color-primary);
@@ -232,7 +240,10 @@ ion-content {
   }
 }
 
-// Responsividade
+body.dark-mode .reserva-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
 @media (max-width: 576px) {
   .header-section {
     flex-direction: column;

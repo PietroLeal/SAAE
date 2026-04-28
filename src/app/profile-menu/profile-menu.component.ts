@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, NavController, PopoverController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
 import { addIcons } from 'ionicons';
-import { personOutline, logOutOutline } from 'ionicons/icons';
+import { personOutline, logOutOutline, moonOutline, sunnyOutline } from 'ionicons/icons';
 import { LogService } from '../services/log.service';
 import { RefreshService } from '../services/refresh.service';
 
@@ -18,6 +18,7 @@ export class ProfileMenuComponent implements OnInit {
   userName: string = '';
   userEmail: string = '';
   userRole: string = '';
+  isDarkMode: boolean = false;
 
   constructor(
     private navCtrl: NavController,
@@ -28,7 +29,9 @@ export class ProfileMenuComponent implements OnInit {
   ) {
     addIcons({
       personOutline,
-      logOutOutline
+      logOutOutline,
+      moonOutline,
+      sunnyOutline
     });
   }
 
@@ -39,6 +42,19 @@ export class ProfileMenuComponent implements OnInit {
       this.userName = user.nome || user.email?.split('@')[0] || 'Usuário';
       this.userRole = user.tipo || '';
     }
+    this.isDarkMode = document.body.classList.contains('dark-mode');
+  }
+
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('dark-mode', 'enabled');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('dark-mode', 'disabled');
+    }
+    this.refreshService.triggerRefresh();
   }
 
   async verPerfil() {
