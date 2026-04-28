@@ -1,56 +1,64 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonicModule, NavController, AlertController } from '@ionic/angular';
-import { AuthService } from '../services/auth.service';
-import { LogService } from '../services/log.service';
 import { addIcons } from 'ionicons';
-import { mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline, calendarOutline } from 'ionicons/icons';
+import { 
+  mailOutline, 
+  lockClosedOutline, 
+  eyeOutline, 
+  eyeOffOutline, 
+  calendarOutline,
+  moonOutline,
+  sunnyOutline
+} from 'ionicons/icons';
+import { AuthService } from '../services/auth.service';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    IonicModule
-  ]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule]
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   loginForm: FormGroup;
-  loading = false;
-  showPassword = false;
+  loading: boolean = false;
+  showPassword: boolean = false;
+  isDarkMode: boolean = false;
 
   constructor(
-    private navCtrl: NavController,
-    private fb: FormBuilder,
-    private alertCtrl: AlertController,
+    private formBuilder: FormBuilder,
     private authService: AuthService,
-    private logService: LogService
+    private navCtrl: NavController,
+    private alertCtrl: AlertController,
+    private themeService: ThemeService
   ) {
     addIcons({
       mailOutline,
       lockClosedOutline,
       eyeOutline,
       eyeOffOutline,
-      calendarOutline
+      calendarOutline,
+      moonOutline,
+      sunnyOutline
     });
-
-    this.loginForm = this.fb.group({
+    
+    this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  ionViewWillEnter() {
-    if (this.authService.isLoggedIn()) {
-      console.log('Usuário já logado, redirecionando para dashboard');
-      this.navCtrl.navigateRoot('/dashboard', { replaceUrl: true });
-      return;
-    }
+  ngOnInit() {
+    this.themeService.isDarkMode$.subscribe(isDark => {
+      this.isDarkMode = isDark;
+    });
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 
   togglePasswordVisibility() {
@@ -59,50 +67,70 @@ export class LoginPage {
 
   async login() {
     if (this.loginForm.invalid) {
-      this.presentAlert('Erro', 'Preencha e-mail e senha corretamente');
       return;
     }
 
     this.loading = true;
 
     try {
-      const response = await this.authService.login(
+      const user = await this.authService.login(
         this.loginForm.value.email,
         this.loginForm.value.password
       );
-
-      await this.logService.registrarLog('LOGIN', {
-        email: this.loginForm.value.email,
-        tipo: response.user.tipo
-      });
-
-      console.log('Login realizado:', response.user);
-
-      this.presentAlert('Sucesso', `Bem-vindo, ${response.user.nome}!`);
-      await this.navCtrl.navigateRoot('/dashboard', { replaceUrl: true });
       
-    } catch (error: any) {
-      let mensagem = 'Erro ao fazer login';
-      if (error?.error === 'Usuário não encontrado') {
-        mensagem = 'Usuário não encontrado';
-      } else if (error?.error === 'Senha incorreta') {
-        mensagem = 'Senha incorreta';
+      if (user && user.user && user.user.id) {
+        this.themeService.carregarTemaDoUsuario(user.user.id);
       }
-      this.presentAlert('Erro', mensagem);
+      
+      this.navCtrl.navigateRoot('/dashboard');
+    } catch (error: any) {
+      const alert = await this.alertCtrl.create({
+        header: 'Erro',
+        message: error.message || 'Email ou senha inválidos',
+        buttons: ['OK']
+      });
+      await alert.present();
     } finally {
       this.loading = false;
     }
   }
 
-  goToForgotPassword() {
-    this.navCtrl.navigateForward('/forgot-password');
-  }
-
-  async presentAlert(header: string, message: string) {
+  async goToForgotPassword() {
     const alert = await this.alertCtrl.create({
-      header,
-      message,
-      buttons: ['OK']
+      header: 'Recuperar Senha',
+      inputs: [
+        {
+          name: 'email',
+          type: 'email',
+          placeholder: 'Seu e-mail'
+        }
+      ],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Enviar',
+          handler: async (data) => {
+            if (data.email) {
+              try {
+                await this.authService.requestPasswordReset(data.email);
+                const successAlert = await this.alertCtrl.create({
+                  header: 'Sucesso',
+                  message: 'Email de recuperação enviado!',
+                  buttons: ['OK']
+                });
+                await successAlert.present();
+              } catch (error) {
+                const errorAlert = await this.alertCtrl.create({
+                  header: 'Erro',
+                  message: 'Erro ao enviar email de recuperação',
+                  buttons: ['OK']
+                });
+                await errorAlert.present();
+              }
+            }
+          }
+        }
+      ]
     });
     await alert.present();
   }

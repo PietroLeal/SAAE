@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Router } from '@angular/router';
+import { ThemeService } from './theme.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class AuthService {
 
   constructor(
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private injector: Injector
   ) {
     this.checkAuth();
   }
@@ -35,6 +37,7 @@ export class AuthService {
         const response = await this.api.getMe();
         if (response && response.user) {
           this.currentUserSubject.next(response.user);
+          this.carregarTemaDoUsuario(response.user.id);
         }
       } catch (error) {
         this.currentUserSubject.next(null);
@@ -52,12 +55,20 @@ export class AuthService {
       const response = await this.api.login(email, password);
       if (response && response.user) {
         this.currentUserSubject.next(response.user);
+        this.carregarTemaDoUsuario(response.user.id);
         return response;
       }
       throw new Error('Erro ao fazer login');
     } catch (error) {
       throw error;
     }
+  }
+
+  private carregarTemaDoUsuario(usuarioId: number) {
+    setTimeout(() => {
+      const themeService = this.injector.get(ThemeService);
+      themeService.carregarTemaDoUsuario(usuarioId);
+    }, 0);
   }
 
   async requestPasswordReset(email: string): Promise<void> {
@@ -91,6 +102,7 @@ export class AuthService {
     } catch (error) {
       console.error('Erro no logout:', error);
     }
+    
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }

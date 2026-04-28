@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { AuthService } from './auth.service';
 
 export interface Notificacao {
   id: number;
@@ -10,6 +11,7 @@ export interface Notificacao {
   lida: boolean;
   tipo: 'reserva' | 'cancelamento' | 'lembrete' | 'sistema';
   dados?: any;
+  usuarioId: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -17,35 +19,65 @@ export class NotificationService {
   private notificacoes: Notificacao[] = [];
   private notificacoesSubject = new BehaviorSubject<Notificacao[]>([]);
   notificacoes$ = this.notificacoesSubject.asObservable();
+  private usuarioAtualId: number | null = null;
 
-  constructor(private platform: Platform) {
+  constructor(
+    private platform: Platform,
+    private authService: AuthService
+  ) {
     this.init();
-    this.carregarNotificacoes();
   }
 
   async init() {
     await this.platform.ready();
-    this.carregarNotificacoes();
+    
+    this.authService.currentUser$.subscribe(user => {
+      if (user && user.id) {
+        this.usuarioAtualId = user.id;
+        this.carregarNotificacoesDoUsuario();
+      } else {
+        this.usuarioAtualId = null;
+        this.notificacoes = [];
+        this.notificacoesSubject.next([]);
+      }
+    });
   }
 
-  private carregarNotificacoes() {
-    const saved = localStorage.getItem('notificacoes');
+  private getStorageKey(): string {
+    return `notificacoes_usuario_${this.usuarioAtualId}`;
+  }
+
+  private carregarNotificacoesDoUsuario() {
+    if (!this.usuarioAtualId) {
+      this.notificacoes = [];
+      this.notificacoesSubject.next([]);
+      return;
+    }
+    
+    const saved = localStorage.getItem(this.getStorageKey());
     if (saved) {
       this.notificacoes = JSON.parse(saved);
       this.notificacoesSubject.next(this.notificacoes);
+    } else {
+      this.notificacoes = [];
+      this.notificacoesSubject.next([]);
     }
   }
 
   private salvarNotificacoes() {
-    localStorage.setItem('notificacoes', JSON.stringify(this.notificacoes));
+    if (!this.usuarioAtualId) return;
+    localStorage.setItem(this.getStorageKey(), JSON.stringify(this.notificacoes));
     this.notificacoesSubject.next(this.notificacoes);
   }
 
-  adicionarNotificacao(notificacao: Omit<Notificacao, 'id' | 'data' | 'lida'>) {
+  adicionarNotificacao(notificacao: Omit<Notificacao, 'id' | 'data' | 'lida' | 'usuarioId'>) {
+    if (!this.usuarioAtualId) return null;
+    
     const novaNotificacao: Notificacao = {
       id: Date.now(),
       data: new Date(),
       lida: false,
+      usuarioId: this.usuarioAtualId,
       ...notificacao
     };
     

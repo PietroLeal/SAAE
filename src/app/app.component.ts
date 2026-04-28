@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { AuthService } from './services/auth.service';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,10 @@ import { AuthService } from './services/auth.service';
   imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent implements OnInit {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private themeService: ThemeService
+  ) {}
 
   ngOnInit() {
     this.authService.currentUser$.subscribe((user) => {
@@ -18,10 +22,5 @@ export class AppComponent implements OnInit {
         console.log('❌ Ninguém logado');
       }
     });
-
-    const darkModeEnabled = localStorage.getItem('dark-mode') === 'enabled';
-    if (darkModeEnabled) {
-      document.body.classList.add('dark-mode');
-    }
   }
 }
