@@ -466,7 +466,19 @@ app.get('/api/:table', async (req, res) => {
   try {
     validateTable(req.params.table);
     const [rows] = await pool.query(`SELECT * FROM ${req.params.table}`);
-    res.json(rows);
+
+    const parsedRows = rows.map(row => {
+      if (row.horarios && typeof row.horarios === 'string') {
+        try {
+          row.horarios = JSON.parse(row.horarios);
+        } catch (e) {
+          row.horarios = [];
+        }
+      }
+      return row;
+    });
+
+    res.json(parsedRows);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -291,15 +291,32 @@ export class GerenciarDisponibilidadePage implements OnInit {
     }
   }
 
-  getHorariosTexto(horarios: number[]): string {
-    if (!horarios || horarios.length === 0) return 'Nenhum horário';
-    const horariosOrdenados = [...horarios].sort((a, b) => a - b);
-    return horariosOrdenados.map(h => {
-      const horario = this.horarios.find(hh => hh.numero === h);
-      return horario ? `${horario.numero}º` : '';
-    }).join(', ');
+  getHorariosTexto(horarios: any): string {
+  if (!horarios) return 'Nenhum horário';
+
+  // 🔥 converte string -> array
+  if (typeof horarios === 'string') {
+    try {
+      horarios = JSON.parse(horarios);
+    } catch {
+      return 'Nenhum horário';
+    }
   }
 
+  if (!Array.isArray(horarios) || horarios.length === 0) {
+    return 'Nenhum horário';
+  }
+
+  return horarios
+    .map(h => Number(h)) // garante número
+    .sort((a, b) => a - b)
+    .map(numero => {
+      const horario = this.horarios.find(h => h.numero === numero);
+      return horario ? `${horario.numero}º` : '';
+    })
+    .filter(Boolean)
+    .join(', ');
+}
   async presentToast(message: string, color: string = 'primary') {
     const toast = await this.toastCtrl.create({
       message,
