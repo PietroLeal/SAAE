@@ -63,9 +63,6 @@ export class PermissaoService {
     }
   }
 
-  // ⭐ NÃO ADICIONE O MÉTODO refreshPermissoes AQUI!
-  // O método getPermissoesDoUsuario com forcarRefresh=true já faz o que você precisa
-
   getPermissoesPadrao(tipo: string): Permissoes {
     const padrao: Record<string, Permissoes> = {
       'Professor': {

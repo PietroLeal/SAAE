@@ -91,43 +91,33 @@ export class DashboardPage implements OnInit {
   }
   
   async ngOnInit() {
-    // Subscribe no refresh service
     this.refreshService.refresh$.subscribe(async () => {
       console.log('🔄 Refresh triggered, recarregando dashboard...');
       await this.recarregarTudo();
     });
     
-    // Carregamento inicial
     await this.recarregarTudo();
   }
 
-  // ⭐ MÉTODO PRINCIPAL - Recarrega todos os dados quando a tela for exibida
   async ionViewWillEnter() {
     console.log('🔄 Dashboard será exibido, recarregando todos os dados...');
     await this.recarregarTudo();
   }
 
-  // ⭐ NOVO MÉTODO - Centraliza toda a recarga de dados
   async recarregarTudo() {
     console.log('🔄 Recarregando todos os dados do dashboard...');
     
-    // 1. Recarregar permissões do usuário atual (forçando refresh)
     this.permissoes = await this.permissaoService.getPermissoesDoUsuario(true);
     console.log('✅ Permissões atualizadas:', this.permissoes);
     
-    // 2. Recarregar dados do usuário
     await this.carregarDados();
     
-    // 3. Recarregar reservas
     await this.carregarReservas();
     
-    // 4. Atualizar mensagem do dia
     this.definirMensagemDoDia();
     
-    // 5. Garantir que os dados estão carregados
     this.dadosCarregados = true;
     
-    // 6. Forçar atualização da tela
     this.cdr.detectChanges();
     
     console.log('✅ Dashboard completamente atualizado para o usuário:', this.userName, 'Perfil:', this.userRole);

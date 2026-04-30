@@ -251,14 +251,12 @@ export class PerfisPage implements OnInit {
     this.editando = true;
     this.perfilEditando = perfil;
     
-    // Inicializa todas as permissões como false
     const todasPermissoes: { [key: string]: boolean } = {};
     
     for (const p of this.permissoesDisponiveis) {
       todasPermissoes[p.chave] = false;
     }
     
-    // Copia as permissões existentes
     for (const [chave, valor] of Object.entries(permissoes)) {
       todasPermissoes[chave] = valor;
     }
