@@ -7,16 +7,20 @@
   </div>
 
   <div *ngIf="!loading" class="perfil-container">
-    <!-- Avatar -->
     <div class="avatar-container">
       <div class="avatar">
         <ion-icon name="person-outline"></ion-icon>
       </div>
     </div>
 
-    <!-- Formulário -->
+    <!-- Botão de editar flutuante -->
+    <ion-fab vertical="top" horizontal="end" slot="fixed" *ngIf="!editando">
+      <ion-fab-button (click)="entrarModoEdicao()">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
     <ion-list>
-      <!-- Nome -->
       <ion-item>
         <ion-icon name="person-outline" slot="start"></ion-icon>
         <ion-label position="stacked">Nome</ion-label>
@@ -27,7 +31,6 @@
         </ion-input>
       </ion-item>
 
-      <!-- E-mail (não editável) -->
       <ion-item>
         <ion-icon name="mail-outline" slot="start"></ion-icon>
         <ion-label position="stacked">E-mail</ion-label>
@@ -38,7 +41,6 @@
         </ion-input>
       </ion-item>
 
-      <!-- Telefone -->
       <ion-item>
         <ion-icon name="call-outline" slot="start"></ion-icon>
         <ion-label position="stacked">Telefone</ion-label>
@@ -50,7 +52,6 @@
         </ion-input>
       </ion-item>
 
-      <!-- Tipo (não editável) -->
       <ion-item>
         <ion-icon name="briefcase-outline" slot="start"></ion-icon>
         <ion-label position="stacked">Cargo</ion-label>
@@ -61,7 +62,6 @@
         </ion-input>
       </ion-item>
 
-      <!-- Data de criação -->
       <ion-item *ngIf="usuario.criadoEm">
         <ion-icon name="calendar-outline" slot="start"></ion-icon>
         <ion-label position="stacked">Cadastrado em</ion-label>
@@ -69,7 +69,7 @@
       </ion-item>
     </ion-list>
 
-    <!-- Botões de ação -->
+    <!-- Botões de ação quando em modo edição -->
     <div class="action-buttons" *ngIf="editando">
       <ion-button expand="block" color="success" (click)="salvarPerfil()" [disabled]="salvando">
         <ion-icon name="save-outline" slot="start"></ion-icon>

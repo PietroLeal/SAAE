@@ -1,7 +1,6 @@
 <app-header></app-header>
 
 <ion-content class="ion-padding">
-  <!-- Cabeçalho -->
   <div class="header-section">
     <div class="header-title">
       <h1>Minhas Reservas</h1>
@@ -13,7 +12,6 @@
     </ion-button>
   </div>
 
-  <!-- Filtros -->
   <div class="filtros-section">
     <div class="filtros-header">
       <ion-icon name="filter-outline"></ion-icon>
@@ -25,7 +23,6 @@
     </div>
     
     <div class="filtros-row">
-      <!-- Filtro por status -->
       <div class="filtro-group">
         <ion-select 
           [(ngModel)]="filtroStatus" 
@@ -42,7 +39,6 @@
         </ion-select>
       </div>
       
-      <!-- Filtro por data -->
       <div class="filtro-group">
         <ion-input 
           type="date"
@@ -55,15 +51,12 @@
     </div>
   </div>
 
-  <!-- Loading -->
   <div *ngIf="loading" class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
     <p>Carregando suas reservas...</p>
   </div>
 
-  <!-- Lista de Reservas -->
   <div *ngIf="!loading">
-    <!-- Sem reservas -->
     <div *ngIf="reservasFiltradas.length === 0" class="empty-state">
       <ion-icon name="calendar-outline"></ion-icon>
       <h3>Nenhuma reserva encontrada</h3>
@@ -75,7 +68,7 @@
       </p>
       <ion-button fill="outline" color="primary" (click)="agendarNova()" *ngIf="reservas.length === 0">
         <ion-icon name="calendar-outline" slot="start"></ion-icon>
-        Fazer primeira reserva
+        Fazer reserva
       </ion-button>
       <ion-button fill="outline" color="medium" (click)="limparFiltros()" *ngIf="reservas.length > 0 && reservasFiltradas.length === 0">
         <ion-icon name="refresh-outline" slot="start"></ion-icon>
@@ -83,7 +76,6 @@
       </ion-button>
     </div>
 
-    <!-- Cards de reservas -->
     <div class="reservas-grid">
       <ion-card *ngFor="let reserva of reservasFiltradas" class="reserva-card" [class.cancelada]="reserva.status === 'cancelada'">
         <div class="card-header">
