@@ -2,18 +2,14 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ToastController } from '@ionic/angular';
-import { firstValueFrom } from 'rxjs';
 
 export const authGuard = async () => {
   const authService = inject(AuthService);
   const router = inject(Router);
   const toastCtrl = inject(ToastController);
 
-  const loading = await firstValueFrom(authService.loading$);
-  if (loading) {
-    await firstValueFrom(authService.loading$.pipe(
-    ));
-  }
+  // 🔥 ESPERA autenticação terminar
+  await authService.waitForAuth();
 
   if (authService.isLoggedIn()) {
     return true;
@@ -25,6 +21,7 @@ export const authGuard = async () => {
     position: 'bottom',
     color: 'danger'
   });
+
   await toast.present();
 
   return router.parseUrl('/login');

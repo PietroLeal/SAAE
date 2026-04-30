@@ -11,7 +11,11 @@ export const roleGuard = (permissaoNecessaria: keyof Permissoes) => {
     const permissaoService = inject(PermissaoService);
     const toastCtrl = inject(ToastController);
 
+    // 🔥 ESPERA auth inicializar
+    await authService.waitForAuth();
+
     const user = authService.getCurrentUser();
+
     if (!user) {
       const toast = await toastCtrl.create({
         message: '🔒 Faça login para continuar',
@@ -20,11 +24,12 @@ export const roleGuard = (permissaoNecessaria: keyof Permissoes) => {
         color: 'danger'
       });
       await toast.present();
+
       return router.parseUrl('/login');
     }
 
     const permissoes = await permissaoService.getPermissoesDoUsuario();
-    
+
     if (permissoes && permissoes[permissaoNecessaria]) {
       return true;
     }
@@ -35,8 +40,9 @@ export const roleGuard = (permissaoNecessaria: keyof Permissoes) => {
       position: 'bottom',
       color: 'warning'
     });
+
     await toast.present();
-    
+
     return router.parseUrl('/dashboard');
   };
 };

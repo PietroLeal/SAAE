@@ -10,16 +10,32 @@ import { ThemeService } from './theme.service';
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
+
   private loadingSubject = new BehaviorSubject<boolean>(true);
   loading$ = this.loadingSubject.asObservable();
+
   private checkAuthPromise: Promise<void> | null = null;
+
+  // 🔥 ADICIONADO: controle de inicialização do auth
+  private authReadyPromise: Promise<void>;
+  private resolveAuthReady!: () => void;
 
   constructor(
     private api: ApiService,
     private router: Router,
     private injector: Injector
   ) {
+    // 🔥 ADICIONADO
+    this.authReadyPromise = new Promise((resolve) => {
+      this.resolveAuthReady = resolve;
+    });
+
     this.checkAuth();
+  }
+
+  // 🔥 ADICIONADO: usado pelos guards
+  waitForAuth(): Promise<void> {
+    return this.authReadyPromise;
   }
 
   async checkAuth() {
@@ -30,19 +46,25 @@ export class AuthService {
     this.checkAuthPromise = (async () => {
       if (this.currentUserSubject.value) {
         this.loadingSubject.next(false);
+        this.resolveAuthReady(); // 🔥 ADICIONADO
         return;
       }
 
       try {
         const response = await this.api.getMe();
+
         if (response && response.user) {
           this.currentUserSubject.next(response.user);
           this.carregarTemaDoUsuario(response.user.id);
+        } else {
+          this.currentUserSubject.next(null);
         }
+
       } catch (error) {
         this.currentUserSubject.next(null);
       } finally {
         this.loadingSubject.next(false);
+        this.resolveAuthReady(); // 🔥 ADICIONADO (libera guards)
         this.checkAuthPromise = null;
       }
     })();
@@ -53,11 +75,13 @@ export class AuthService {
   async login(email: string, password: string): Promise<any> {
     try {
       const response = await this.api.login(email, password);
+
       if (response && response.user) {
         this.currentUserSubject.next(response.user);
         this.carregarTemaDoUsuario(response.user.id);
         return response;
       }
+
       throw new Error('Erro ao fazer login');
     } catch (error) {
       throw error;
@@ -102,7 +126,7 @@ export class AuthService {
     } catch (error) {
       console.error('Erro no logout:', error);
     }
-    
+
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
